@@ -95,10 +95,11 @@ const SearchInput = () => {
                 <>
                   {searchResults.map((product) => (
                     <button
+                      key={product.id}
                       onClick={() => handleProductClick(product.slug)}
                       className="p-0 mx-auto cursor-pointer w-full"
                     >
-                      <SearchResult key={product.id} product={product} />
+                      <SearchResult product={product} />
                     </button>
                   ))}
                 </>
