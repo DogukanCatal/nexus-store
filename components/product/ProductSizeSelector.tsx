@@ -5,27 +5,27 @@ import React from "react";
 type ProductSizeSelectorProps = {
   sizes: ProductSize[];
   stock: ProductStock[];
-  selectedIndex: number;
-  onChange: (index: number) => void;
+  selectedSizeId: string;
+  onChange: (id: string) => void;
 };
 
 const ProductSizeSelector = ({
   sizes,
   stock,
-  selectedIndex,
+  selectedSizeId,
   onChange,
 }: ProductSizeSelectorProps) => {
   return (
     <div className="flex">
       {sizes.map((size, i) => {
-        const isSelected = i === selectedIndex;
+        const isSelected = size.id === selectedSizeId;
         const hasStock = stock.some(
           (s) => s.size_id === size.id && s.stock > 0
         );
         return (
           <div key={size.id} className="mr-2">
             <button
-              onClick={() => onChange(i)}
+              onClick={() => onChange(size.id)}
               disabled={!hasStock}
               className={`rounded-lg border-1 w-12 h-12 md:w-20 md:h-14 bg-[#131313] font-bold text-xs md:text-sm ${
                 isSelected ? "border-white" : "border-white/50"

@@ -24,7 +24,7 @@ const ProductPrice = ({
   };
 
   return isDiscounted ? (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-start gap-2">
       <div className="flex items-center gap-2">
         <span className={`font-semibold ${sizeClasses[priceSize]}`}>
           {finalPrice.toFixed(2)} TL

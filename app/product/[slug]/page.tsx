@@ -17,8 +17,7 @@ const ProductDetailPage = async ({
     return <p>Product not found</p>;
   }
 
-  const isDiscounted: boolean =
-    product.discount_percent !== null && product.discount_percent > 0;
+  console.log(product);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 p-4 sm:p-8 md:p-14 mx-auto w-full">
@@ -37,14 +36,6 @@ const ProductDetailPage = async ({
         {/* Description */}
 
         {/* Price */}
-        <ProductPrice
-          price={product.price}
-          discountPercent={product.discount_percent}
-          isDiscounted={isDiscounted}
-          finalPrice={product.final_price}
-          discountSize="medium"
-          priceSize="large"
-        />
       </div>
     </div>
   );
