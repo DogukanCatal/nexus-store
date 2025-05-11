@@ -1,6 +1,6 @@
 "use client";
 import { Product } from "@/types/product";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ProductColorSelector from "./ProductColorSelector";
 import ProductSizeSelector from "./ProductSizeSelector";
 import { Button } from "../ui/button";
@@ -42,15 +42,21 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     return sizeWithStock?.id ?? product.product_sizes[0]?.id;
   });
 
-  const orderedSizes = product.product_sizes.sort(
-    (a, b) => a.size.sort_order - b.size.sort_order
-  );
-  const filteredStock = product.product_stock.filter(
-    (s) => s.color_id === selectedColorId
-  );
-  const filteredSizes = orderedSizes.filter((size) =>
-    filteredStock.some((stock) => stock.size_id === size.id)
-  );
+  const orderedSizes = useMemo(() => {
+    return [...product.product_sizes].sort(
+      (a, b) => a.size.sort_order - b.size.sort_order
+    );
+  }, [product.product_sizes]);
+
+  const filteredStock = useMemo(() => {
+    return product.product_stock.filter((s) => s.color_id === selectedColorId);
+  }, [product.product_stock, selectedColorId]);
+
+  const filteredSizes = useMemo(() => {
+    return orderedSizes.filter((size) =>
+      filteredStock.some((stock) => stock.size_id === size.id)
+    );
+  }, [orderedSizes, filteredStock]);
   const selectedColor = product.product_colors.find(
     (color) => color.id === selectedColorId
   );
@@ -76,14 +82,16 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
   const buttonTitle = isCompletelyOutOfStock ? "Out Of Stock" : "Add To Cart";
   const handleAddToBasket = () => {
     if (!product) return;
-    console.log(product.id, product.product_stock);
 
     const productStock = filteredStock.find(
       (s) =>
         s.product_id === product.id &&
         s.size_id === selectedSizeId &&
         s.color_id === selectedColorId
-    )!;
+    );
+
+    if (!productStock) return;
+
     const basketProduct: BasketProduct = {
       product_id: product.id,
       name: product.name,
@@ -99,7 +107,6 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
       size_name: selectedSize?.size.label,
       stock: productStock.stock,
     };
-    console.log(basketProduct);
     //todo should not be able to add more than stock number.
     addItem(basketProduct);
   };
