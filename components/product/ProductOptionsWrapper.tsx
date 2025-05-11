@@ -18,8 +18,6 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     (a, b) => a.size.sort_order - b.size.sort_order
   );
 
-  console.log("sizes", orderedSizes);
-
   return (
     <div className="flex flex-col gap-2">
       <span className="font-semibold text-white/50 text-xs md:text-sm">

@@ -12,7 +12,6 @@ const ProductItem = ({ product }: ProductItemProps) => {
   if (!product || !product.price || product.price <= 0 || !product.is_active)
     return null;
 
-  console.log(product);
   return (
     <div className="rounded-lg overflow-hidden relative flex flex-col">
       <Link

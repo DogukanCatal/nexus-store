@@ -77,13 +77,13 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
       {/* Prev/Next buttons */}
       <button
         onClick={scrollPrev}
-        className="absolute top-1/2 left-2 -translate-y-1/2 z-10 p-2 bg-white/50 rounded-full"
+        className="absolute top-1/2 left-2 -translate-y-1/2 z-10 p-2 bg-white/50 rounded-full cursor-pointer"
       >
         <ChevronLeft className="text-black" size={20} />
       </button>
       <button
         onClick={scrollNext}
-        className="absolute top-1/2 right-2 -translate-y-1/2 z-10 p-2 bg-white/50 rounded-full"
+        className="absolute top-1/2 right-2 -translate-y-1/2 z-10 p-2 bg-white/50 rounded-full cursor-pointer"
       >
         <ChevronRight className="text-black" size={20} />
       </button>
@@ -93,7 +93,7 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
         {/* Scroll left */}
         <button
           onClick={() => scrollThumbnails("left")}
-          className="z-10 p-1 bg-white/50 rounded-full"
+          className="z-10 p-1 bg-white/50 rounded-full cursor-pointer"
         >
           <ChevronLeft size={18} className="text-black" />
         </button>
@@ -128,7 +128,7 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
         {/* Scroll right */}
         <button
           onClick={() => scrollThumbnails("right")}
-          className="z-10 p-1 bg-white/50 rounded-full"
+          className="z-10 p-1 bg-white/50 rounded-full cursor-pointer"
         >
           <ChevronRight size={18} className="text-black" />
         </button>
