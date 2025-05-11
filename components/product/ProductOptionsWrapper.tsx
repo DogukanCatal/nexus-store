@@ -36,7 +36,7 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
         onChange={(index) => setSelectedColorIndex(index)}
       />
 
-      <span className="font-semibold text-white/40 text-xs md:text-sm mt-2">
+      <span className="font-semibold text-white/50 text-xs md:text-sm mt-2">
         Size:{" "}
         <span className="font-bold text-white">
           {orderedSizes[selectedSizeIndex].size.label}
