@@ -17,7 +17,7 @@ const ProductColorSelector = ({
 }: ProductColorSelectorProps) => {
   return (
     <div className="flex">
-      {colors.map((color, i) => {
+      {colors.map((color) => {
         const isWhite = color.color.hex === "#FFFFFF";
         const isSelected = color.id === selectedColorId;
         const hasStock = stock.some(
