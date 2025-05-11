@@ -101,7 +101,7 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
         {/* Thumbnails - exactly 3 visible */}
         <div
           ref={thumbnailContainerRef}
-          className="flex overflow-x-auto gap-2 max-w-[172px] md:max-w-[286px] flex-nowrap scrollbar-none"
+          className="flex overflow-x-auto gap-2 max-w-[172px] md:max-w-[286px] flex-nowrap scrollbar-hidden"
         >
           {images.map((img, i) => (
             <button

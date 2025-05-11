@@ -13,6 +13,7 @@ import searchProducts from "@/lib/api/search-products";
 import { Products } from "@/types/products";
 import { Skeleton } from "../ui/skeleton";
 import SearchResult from "./SearchResult";
+import { useRouter } from "next/navigation";
 
 const SearchInput = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -21,6 +22,8 @@ const SearchInput = () => {
   const [query, setQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<Products[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     const delay = setTimeout(async () => {
@@ -37,9 +40,16 @@ const SearchInput = () => {
     return () => clearTimeout(delay);
   }, [query]);
 
+  const handleProductClick = (slug: string) => {
+    setOpen(false); // Sheet'i kapat
+    setTimeout(() => {
+      router.push(`/product/${slug}`);
+    }, 100); // animasyon süresi
+  };
+
   return (
     <div>
-      <Sheet>
+      <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger className="flex">
           <Search className="hover:cursor-pointer" />
         </SheetTrigger>
@@ -80,11 +90,16 @@ const SearchInput = () => {
               </div>
             )}
             {/* todo style no product found */}
-            <div className="overflow-y-auto min-h-0 flex-1 pr-2">
+            <div className="overflow-y-auto min-h-0 flex-1 w-full scrollbar-hidden">
               {!isLoading && searchResults.length > 0 ? (
                 <>
                   {searchResults.map((product) => (
-                    <SearchResult key={product.id} product={product} />
+                    <button
+                      onClick={() => handleProductClick(product.slug)}
+                      className="p-0 mx-auto cursor-pointer w-full"
+                    >
+                      <SearchResult key={product.id} product={product} />
+                    </button>
                   ))}
                 </>
               ) : (

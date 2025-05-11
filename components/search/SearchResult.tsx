@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import ProductHoverImage from "../product/ProductHoverImage";
 import ProductPrice from "../product/ProductPrice";
@@ -10,11 +9,7 @@ type SearchResultProps = {
 
 const SearchResult = ({ product }: SearchResultProps) => {
   return (
-    <Link
-      href={`/product/${product.slug}`}
-      key={product.id}
-      className="flex items-center gap-2 w-full mb-4 group"
-    >
+    <div className="flex items-center justify-start gap-2 w-full mb-4 bg-blue-600 group">
       <div className="rounded-lg overflow-hidden relative block aspect-square w-24 shrink-0">
         <ProductHoverImage
           name={product.name}
@@ -22,7 +17,7 @@ const SearchResult = ({ product }: SearchResultProps) => {
           second_img={product.second_image_url}
         />
       </div>
-      <div className="flex flex-col gap-2 justify-center min-w-0 ">
+      <div className="flex flex-col gap-2 justify-center items-start min-w-0 flex-1">
         <span className="rounded  truncate font-bold  text-sm md:text-base">
           {product.name}
         </span>
@@ -33,7 +28,7 @@ const SearchResult = ({ product }: SearchResultProps) => {
           isDiscounted={product.is_discounted}
         />
       </div>
-    </Link>
+    </div>
   );
 };
 
