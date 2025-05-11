@@ -18,7 +18,7 @@ type BasketStore = {
 
 export const useBasketStore = create<BasketStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       items: [],
       totalPrice: 0,
       totalQuantity: 0,

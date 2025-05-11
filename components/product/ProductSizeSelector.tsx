@@ -17,7 +17,7 @@ const ProductSizeSelector = ({
 }: ProductSizeSelectorProps) => {
   return (
     <div className="flex">
-      {sizes.map((size, i) => {
+      {sizes.map((size) => {
         const isSelected = size.id === selectedSizeId;
         const hasStock = stock.some(
           (s) => s.size_id === size.id && s.stock > 0

@@ -1,6 +1,5 @@
 import ProductCarouselWrapper from "@/components/product/ProductCarouselWrapper";
 import ProductOptionsWrapper from "@/components/product/ProductOptionsWrapper";
-import ProductPrice from "@/components/product/ProductPrice";
 import { getProductDetailBySlug } from "@/lib/api/get-product-detail-by-slug";
 import React from "react";
 
