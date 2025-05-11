@@ -11,8 +11,9 @@ type ProductOptionsWrapperProps = {
 const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
   const [selectedColorIndex, setSelectedColorIndex] = useState<number>(0);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number>(0);
-  const selectedColor = product.product_colors[selectedColorIndex];
-  const selectedSize = product.product_sizes[selectedSizeIndex];
+  // todo
+  // const selectedColor = product.product_colors[selectedColorIndex];
+  // const selectedSize = product.product_sizes[selectedSizeIndex];
   const orderedSizes = product.product_sizes.sort(
     (a, b) => a.size.sort_order - b.size.sort_order
   );

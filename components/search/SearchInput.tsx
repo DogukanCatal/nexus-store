@@ -84,7 +84,7 @@ const SearchInput = () => {
               {!isLoading && searchResults.length > 0 ? (
                 <>
                   {searchResults.map((product) => (
-                    <SearchResult product={product} />
+                    <SearchResult key={product.id} product={product} />
                   ))}
                 </>
               ) : (
