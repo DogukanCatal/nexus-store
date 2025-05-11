@@ -9,7 +9,7 @@ type SearchResultProps = {
 
 const SearchResult = ({ product }: SearchResultProps) => {
   return (
-    <div className="flex items-center justify-start gap-2 w-full mb-4 bg-blue-600 group">
+    <div className="flex items-center justify-start gap-2 w-full mb-4 group">
       <div className="rounded-lg overflow-hidden relative block aspect-square w-24 shrink-0">
         <ProductHoverImage
           name={product.name}
