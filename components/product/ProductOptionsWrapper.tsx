@@ -57,6 +57,7 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
       filteredStock.some((stock) => stock.size_id === size.id)
     );
   }, [orderedSizes, filteredStock]);
+
   const selectedColor = product.product_colors.find(
     (color) => color.id === selectedColorId
   );
