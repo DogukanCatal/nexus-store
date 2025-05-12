@@ -7,12 +7,16 @@ import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 
+type ProductDetailPageProps = {
+  params: {
+    slug: string;
+  };
+};
+
 // ✅ Metadata Fonksiyonu
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+}: ProductDetailPageProps): Promise<Metadata> {
   const product = await getProductDetailBySlug(params.slug);
 
   if (!product) {
@@ -50,7 +54,7 @@ export async function generateMetadata({
   };
 }
 
-const ProductDetailPage = async ({ params }: { params: { slug: string } }) => {
+const ProductDetailPage = async ({ params }: ProductDetailPageProps) => {
   const { slug } = params;
   const product = await getProductDetailBySlug(slug);
 
