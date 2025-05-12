@@ -50,12 +50,8 @@ export async function generateMetadata({
   };
 }
 
-const ProductDetailPage = async ({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) => {
-  const { slug } = await params;
+const ProductDetailPage = async ({ params }: { params: { slug: string } }) => {
+  const { slug } = params;
   const product = await getProductDetailBySlug(slug);
 
   // todo style here if product not found

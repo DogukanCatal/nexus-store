@@ -47,7 +47,6 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     );
     return sizeWithStock?.id ?? product.product_sizes[0]?.id;
   });
-  console.log(selectedSizeId, selectedColorId);
 
   const filteredStock = useMemo(() => {
     return product.product_stock.filter((s) => s.color_id === selectedColorId);
