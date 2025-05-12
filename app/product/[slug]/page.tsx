@@ -7,17 +7,15 @@ import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 
-type ProductDetailPageProps = {
-  params: {
-    slug: string;
-  };
-};
+export type ParamsType = Promise<{ slug: string }>;
 
 // ✅ Metadata Fonksiyonu
-export async function generateMetadata({
-  params,
-}: ProductDetailPageProps): Promise<Metadata> {
-  const product = await getProductDetailBySlug(params.slug);
+export async function generateMetadata(props: {
+  params: ParamsType;
+}): Promise<Metadata> {
+  const { slug } = await props.params;
+
+  const product = await getProductDetailBySlug(slug);
 
   if (!product) {
     return {
@@ -49,13 +47,13 @@ export async function generateMetadata({
     },
     robots: { index: true, follow: true },
     alternates: {
-      canonical: `/product/${params.slug}`,
+      canonical: `/product/${slug}`,
     },
   };
 }
 
-const ProductDetailPage = async ({ params }: ProductDetailPageProps) => {
-  const { slug } = params;
+const ProductDetailPage = async (props: { params: ParamsType }) => {
+  const { slug } = await props.params;
   const product = await getProductDetailBySlug(slug);
 
   // todo style here if product not found
