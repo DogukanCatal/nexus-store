@@ -3,54 +3,54 @@ import ProductDescription from "@/components/product/ProductDescription";
 import ProductOptionsWrapper from "@/components/product/ProductOptionsWrapper";
 import ProductPrice from "@/components/product/ProductPrice";
 import { getProductDetailBySlug } from "@/lib/api/get-product-detail-by-slug";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 
 export type ParamsType = Promise<{ slug: string }>;
 
 // ✅ Metadata Fonksiyonu
-export async function generateMetadata(props: {
-  params: ParamsType;
-}): Promise<Metadata> {
-  const { slug } = await props.params;
+// export async function generateMetadata(props: {
+//   params: ParamsType;
+// }): Promise<Metadata> {
+//   const { slug } = await props.params;
 
-  const product = await getProductDetailBySlug(slug);
+//   const product = await getProductDetailBySlug(slug);
 
-  if (!product) {
-    return {
-      title: "Product not found",
-      description: "The product you are looking for does not exist.",
-      robots: { index: false, follow: false },
-    };
-  }
+//   if (!product) {
+//     return {
+//       title: "Product not found",
+//       description: "The product you are looking for does not exist.",
+//       robots: { index: false, follow: false },
+//     };
+//   }
 
-  const imageUrl = product.product_images[0]?.url || "/default-image.png";
-  const description =
-    product.description?.slice(0, 160) || "Explore product details and prices.";
+//   const imageUrl = product.product_images[0]?.url || "/default-image.png";
+//   const description =
+//     product.description?.slice(0, 160) || "Explore product details and prices.";
 
-  return {
-    title: product.name,
-    description,
-    keywords: [product.name, "buy", "ecommerce", "online shopping", "product"],
-    openGraph: {
-      title: product.name,
-      description,
-      images: [{ url: imageUrl, alt: product.name }],
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: product.name,
-      description,
-      images: [imageUrl],
-    },
-    robots: { index: true, follow: true },
-    alternates: {
-      canonical: `/product/${slug}`,
-    },
-  };
-}
+//   return {
+//     title: product.name,
+//     description,
+//     keywords: [product.name, "buy", "ecommerce", "online shopping", "product"],
+//     openGraph: {
+//       title: product.name,
+//       description,
+//       images: [{ url: imageUrl, alt: product.name }],
+//       type: "website",
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: product.name,
+//       description,
+//       images: [imageUrl],
+//     },
+//     robots: { index: true, follow: true },
+//     alternates: {
+//       canonical: `/product/${slug}`,
+//     },
+//   };
+// }
 
 const ProductDetailPage = async (props: { params: ParamsType }) => {
   const { slug } = await props.params;
