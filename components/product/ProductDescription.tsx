@@ -21,7 +21,7 @@ const ProductDescription = ({ description }: ProductDescriptionProps) => {
             Description
           </AccordionTrigger>
           <AccordionContent className="font-semibold">
-            {description}
+            <h2>{description}</h2>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

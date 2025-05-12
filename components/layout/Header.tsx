@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import SearchInput from "../search/SearchInput";
+import Basket from "../basket/Basket";
 
 const Header = () => {
   return (
@@ -29,7 +30,7 @@ const Header = () => {
         <div className="w-1/3 flex justify-end items-center gap-4">
           <SearchInput />
 
-          <ShoppingBasketIcon />
+          <Basket />
         </div>
       </div>
     </header>

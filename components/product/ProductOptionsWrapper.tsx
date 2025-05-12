@@ -4,11 +4,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import ProductColorSelector from "./ProductColorSelector";
 import ProductSizeSelector from "./ProductSizeSelector";
 import { Button } from "../ui/button";
-import ProductPrice from "./ProductPrice";
-import ProductDescription from "./ProductDescription";
-import { useBasketStore } from "@/lib/store/basket-store";
+import { useBasketStore } from "@/store/basket-store";
 import { useShallow } from "zustand/shallow";
 import { BasketProduct } from "@/types/basketProduct";
+import { toast } from "sonner";
+import CustomToast from "../shared/toast/CustomToast";
 
 type ProductOptionsWrapperProps = {
   product: Product;
@@ -21,6 +21,14 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     }))
   );
 
+  console.log(product);
+
+  const orderedSizes = useMemo(() => {
+    return [...product.product_sizes].sort(
+      (a, b) => a.size.sort_order - b.size.sort_order
+    );
+  }, [product.product_sizes]);
+
   const [selectedColorId, setSelectedColorId] = useState<string>(() => {
     const colorWithStock = product.product_colors.find((color) =>
       product.product_stock.some(
@@ -31,7 +39,7 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
   });
 
   const [selectedSizeId, setSelectedSizeId] = useState<string>(() => {
-    const sizeWithStock = product.product_sizes.find((size) =>
+    const sizeWithStock = orderedSizes.find((size) =>
       product.product_stock.some(
         (stock) =>
           stock.color_id === selectedColorId &&
@@ -41,12 +49,7 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     );
     return sizeWithStock?.id ?? product.product_sizes[0]?.id;
   });
-
-  const orderedSizes = useMemo(() => {
-    return [...product.product_sizes].sort(
-      (a, b) => a.size.sort_order - b.size.sort_order
-    );
-  }, [product.product_sizes]);
+  console.log(selectedSizeId, selectedColorId);
 
   const filteredStock = useMemo(() => {
     return product.product_stock.filter((s) => s.color_id === selectedColorId);
@@ -63,16 +66,15 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
   );
   const selectedSize = filteredSizes.find((size) => size.id === selectedSizeId);
 
-  const isDiscounted: boolean =
-    product.discount_percent !== null && product.discount_percent > 0;
   const isCompletelyOutOfStock = product.product_stock.every(
     (stock) => stock.stock <= 0
   );
+
   useEffect(() => {
     const stockForColor = product.product_stock.filter(
       (s) => s.color_id === selectedColorId && s.stock > 0
     );
-    const firstAvailableSize = product.product_sizes.find((size) =>
+    const firstAvailableSize = filteredSizes.find((size) =>
       stockForColor.some((s) => s.size_id === size.id)
     );
     if (firstAvailableSize) {
@@ -108,8 +110,19 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
       size_name: selectedSize?.size.label,
       stock: productStock.stock,
     };
-    //todo should not be able to add more than stock number.
-    addItem(basketProduct);
+    //if you want it to be silent do
+    //addItem(basketProduct, undefined, { silent: true });
+    addItem(basketProduct, (success, msg) => {
+      // if (success) {
+      //   toast.success(msg);
+      // } else {
+      //   toast.error(msg);
+      // }
+
+      toast.custom((id) => (
+        <CustomToast success={success} message={msg} toastId={id} />
+      ));
+    });
   };
 
   return (
@@ -146,15 +159,6 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
         />
       </div>
 
-      <ProductPrice
-        price={product.price}
-        discountPercent={product.discount_percent}
-        isDiscounted={isDiscounted}
-        finalPrice={product.final_price}
-        discountSize="medium"
-        priceSize="large"
-      />
-
       <Button
         disabled={isCompletelyOutOfStock}
         onClick={handleAddToBasket}
@@ -166,8 +170,6 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
       >
         {buttonTitle}
       </Button>
-
-      <ProductDescription description={product.description} />
     </div>
   );
 };
