@@ -21,8 +21,6 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     }))
   );
 
-  console.log(product);
-
   const orderedSizes = useMemo(() => {
     return [...product.product_sizes].sort(
       (a, b) => a.size.sort_order - b.size.sort_order
@@ -80,7 +78,7 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     if (firstAvailableSize) {
       setSelectedSizeId(firstAvailableSize.id);
     }
-  }, [selectedColorId, product.product_sizes, product.product_stock]);
+  }, [selectedColorId, product.product_stock, filteredSizes]);
 
   const buttonTitle = isCompletelyOutOfStock ? "Out Of Stock" : "Add To Cart";
   const handleAddToBasket = () => {
@@ -113,12 +111,6 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
     //if you want it to be silent do
     //addItem(basketProduct, undefined, { silent: true });
     addItem(basketProduct, (success, msg) => {
-      // if (success) {
-      //   toast.success(msg);
-      // } else {
-      //   toast.error(msg);
-      // }
-
       toast.custom((id) => (
         <CustomToast success={success} message={msg} toastId={id} />
       ));

@@ -64,7 +64,6 @@ const ProductDetailPage = async ({
   }
   const isDiscounted: boolean =
     product.discount_percent !== null && product.discount_percent > 0;
-  console.log(product);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 p-4 sm:p-8 md:p-14 mx-auto w-full">

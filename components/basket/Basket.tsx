@@ -14,7 +14,7 @@ import { useShallow } from "zustand/shallow";
 
 const Basket = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { items, addItem, totalQuantity, totalPrice } = useBasketStore(
+  const { totalQuantity } = useBasketStore(
     useShallow((state) => ({
       items: state.items,
       addItem: state.addItem,
