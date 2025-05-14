@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -13,7 +14,7 @@ import searchProducts from "@/lib/api/search-products";
 import { Products } from "@/types/products";
 import { Skeleton } from "../ui/skeleton";
 import SearchResult from "./SearchResult";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SearchInput = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -23,7 +24,6 @@ const SearchInput = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<Products[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const router = useRouter();
 
   useEffect(() => {
     const delay = setTimeout(async () => {
@@ -40,25 +40,22 @@ const SearchInput = () => {
     return () => clearTimeout(delay);
   }, [query]);
 
-  const handleProductClick = (slug: string) => {
-    setOpen(false); // Sheet'i kapat
-    setTimeout(() => {
-      router.push(`/product/${slug}`);
-    }, 100); // animasyon süresi
-  };
-
   return (
     <div>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger className="flex">
           <Search className="hover:cursor-pointer" />
         </SheetTrigger>
-        <SheetContent side={sheetSide} className={`bg-[#131313] ${roundSide}`}>
-          <SheetHeader>
-            <SheetTitle>{}</SheetTitle>
+        <SheetContent
+          side={sheetSide}
+          className={`w-full bg-[#131313] ${roundSide}`}
+        >
+          <SheetHeader className="hidden">
+            <SheetTitle></SheetTitle>
+            <SheetDescription></SheetDescription>
           </SheetHeader>
-          <div className="flex flex-col items-center flex-1 justify-start px-4 overflow-hidden">
-            <div className="flex items-center justify-center w-full bg-[#262626] p-2 rounded-full shadow-sm gap-2 mb-5">
+          <div className="flex flex-col items-center flex-1 justify-start p-4 mt-5 overflow-hidden">
+            <div className="flex items-center justify-center w-full bg-[#262626] p-2 mb-5 rounded-full shadow-sm gap-2">
               <Search />
               {/* todo add Enter key down to route search page */}
               <input
@@ -72,7 +69,7 @@ const SearchInput = () => {
             </div>
 
             {isLoading && (
-              <div className="flex w-full flex-col">
+              <div className="flex w-full flex-col ">
                 <div className="flex items-center gap-4 w-full mb-5">
                   <Skeleton className="aspect-square w-24 rounded-lg" />
                   <div className="flex flex-col gap-2 flex-1 ">
@@ -94,13 +91,14 @@ const SearchInput = () => {
               {!isLoading && searchResults.length > 0 ? (
                 <>
                   {searchResults.map((product) => (
-                    <button
+                    <Link
                       key={product.id}
-                      onClick={() => handleProductClick(product.slug)}
-                      className="p-0 mx-auto cursor-pointer w-full"
+                      href={`/product/${product.slug}`}
+                      onClick={() => setOpen(false)}
+                      className="text-left block cursor-pointer w-full"
                     >
                       <SearchResult product={product} />
-                    </button>
+                    </Link>
                   ))}
                 </>
               ) : (

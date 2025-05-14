@@ -8,18 +8,19 @@ export const getProductDetailBySlug = async (
     .from("products")
     .select(
       `*,
-    product_images(*,display_order),
+    product_images(id,url,display_order),
     product_colors(id,color:color_id (*)),
     product_sizes(id,size:size_id (*)),
     product_stock(*)
     `
     )
     .eq("slug", slug)
-    .order("display_order", {
-      referencedTable: "product_images",
-      ascending: true,
-    })
     .single();
+
+  // .order("display_order", {
+  //   referencedTable: "product_images",
+  //   ascending: true,
+  // })
 
   if (error || !product) {
     console.log("Product Detail error:", error);

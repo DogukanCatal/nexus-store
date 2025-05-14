@@ -9,6 +9,7 @@ export type BasketProduct = {
   image: string;
   color_id: string;
   color_name: string | undefined;
+  color_hex: string | undefined;
   size_id: string;
   size_name: string | undefined;
   stock: number;

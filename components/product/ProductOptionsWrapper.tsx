@@ -103,6 +103,7 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
       final_price: product.final_price,
       color_id: selectedColorId,
       color_name: selectedColor?.color.name,
+      color_hex: selectedColor?.color.hex,
       size_id: selectedSizeId,
       size_name: selectedSize?.size.label,
       stock: productStock.stock,
@@ -153,7 +154,7 @@ const ProductOptionsWrapper = ({ product }: ProductOptionsWrapperProps) => {
       <Button
         disabled={isCompletelyOutOfStock}
         onClick={handleAddToBasket}
-        className={`font-bold text-sm ms:text-base ${
+        className={`font-bold text-sm ms:text-base py-8 ${
           isCompletelyOutOfStock
             ? "cursor-not-allowed bg-[#262626] text-white"
             : "cursor-pointer bg-white text-black"

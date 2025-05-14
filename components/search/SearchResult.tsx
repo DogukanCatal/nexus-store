@@ -17,10 +17,10 @@ const SearchResult = ({ product }: SearchResultProps) => {
           second_img={product.second_image_url}
         />
       </div>
-      <div className="flex flex-col gap-2 justify-center items-start min-w-0 flex-1">
-        <span className="rounded  truncate font-bold  text-sm md:text-base">
+      <div className="flex flex-col gap-2 justify-center items-start flex-1 min-w-0">
+        <h1 className="truncate font-bold text-sm md:text-base w-full">
           {product.name}
-        </span>
+        </h1>
         <ProductPrice
           price={product.price}
           finalPrice={product.final_price}

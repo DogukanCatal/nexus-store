@@ -3,7 +3,7 @@ import { BasketProduct } from "@/types/basketProduct";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type BasketItem = {
+export type BasketItem = {
   product: BasketProduct;
   quantity: number;
 };
@@ -23,7 +23,12 @@ export type BasketStore = {
     onResult?: OnResult,
     options?: Options
   ) => void;
-  removeItem: (product_id: string, color_id: string, size_id: string) => void;
+  removeItem: (
+    product_id: string,
+    color_id: string,
+    size_id: string,
+    removeCompletely?: boolean
+  ) => void;
   clearBasket: () => void;
 };
 
@@ -79,7 +84,7 @@ export const useBasketStore = create<BasketStore>()(
           };
         });
       },
-      removeItem: (product_id, color_id, size_id) => {
+      removeItem: (product_id, color_id, size_id, removeCompletely = false) => {
         set((state) => {
           const updatedItems = state.items.reduce((acc, item) => {
             if (
@@ -87,7 +92,7 @@ export const useBasketStore = create<BasketStore>()(
               item.product.color_id === color_id &&
               item.product.size_id === size_id
             ) {
-              if (item.quantity > 1) {
+              if (!removeCompletely && item.quantity > 1) {
                 acc.push({ ...item, quantity: item.quantity - 1 });
               }
             } else {
@@ -114,7 +119,6 @@ export const useBasketStore = create<BasketStore>()(
     {
       name: "basket-store",
       storage: encryptedStorage,
-      skipHydration: true,
     }
   )
 );

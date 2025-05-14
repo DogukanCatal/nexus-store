@@ -1,3 +1,4 @@
+import { formatCurrency } from "@/lib/utils/price-utils";
 import React from "react";
 
 type ProductPriceProps = {
@@ -27,12 +28,12 @@ const ProductPrice = ({
     <div className="flex items-center justify-start gap-2">
       <div className="flex items-center gap-2">
         <span className={`font-bold ${sizeClasses[priceSize]}`}>
-          {finalPrice.toFixed(2)} TL
+          {formatCurrency(finalPrice)}
         </span>
         <span
           className={`font-bold ${sizeClasses[discountSize]} line-through text-gray-500`}
         >
-          {price.toFixed(2)} TL
+          {formatCurrency(price)}
         </span>
       </div>
 
@@ -46,7 +47,7 @@ const ProductPrice = ({
     <span
       className={`font-bold ${sizeClasses[priceSize]} flex items-center justify-start`}
     >
-      {finalPrice.toFixed(2)} TL
+      {formatCurrency(price)}
     </span>
   );
 };

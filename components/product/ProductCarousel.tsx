@@ -119,6 +119,7 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
                 src={img.url}
                 alt={`Thumbnail ${i + 1}`}
                 fill
+                priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
               />

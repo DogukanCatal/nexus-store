@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark bg-[#131313] `}
       >
         <Header />
-        <main>{children}</main>
+        <main className="mx-auto container px-4">{children}</main>
         <Toaster style={{ zIndex: 99999 }} />
       </body>
     </html>

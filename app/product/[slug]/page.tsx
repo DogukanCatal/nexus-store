@@ -63,25 +63,26 @@ const ProductDetailPage = async (props: { params: ParamsType }) => {
   const isDiscounted: boolean =
     product.discount_percent !== null && product.discount_percent > 0;
 
+  const orderedImages = product.product_images.sort(
+    (a, b) => a.display_order - b.display_order
+  );
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 p-4 sm:p-8 md:p-14 mx-auto w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 py-4">
       <div>
         {/* SEO Fallback */}
         <noscript>
           <div className="rounded-lg overflow-hidden aspect-square relative mb-4">
-            <Image
+            <img
               src={product.product_images[0].url}
               alt="Product thumbnail"
-              fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>
         </noscript>
         {/* Actual Carousel */}
-        {product.product_images && (
-          <ProductCarousel images={product?.product_images} />
-        )}
+        {orderedImages && <ProductCarousel images={orderedImages} />}
       </div>
 
       <div className="flex flex-col gap-6">
