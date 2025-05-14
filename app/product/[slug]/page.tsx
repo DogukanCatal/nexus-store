@@ -73,10 +73,10 @@ const ProductDetailPage = async (props: { params: ParamsType }) => {
         {/* SEO Fallback */}
         <noscript>
           <div className="rounded-lg overflow-hidden aspect-square relative mb-4">
-            <img
+            <Image
               src={product.product_images[0].url}
               alt="Product thumbnail"
-              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
               className="object-cover"
             />
           </div>
