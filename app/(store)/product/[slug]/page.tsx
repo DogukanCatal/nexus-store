@@ -68,7 +68,7 @@ const ProductDetailPage = async (props: { params: ParamsType }) => {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 py-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 py-4 min-h-screen">
       <div>
         {/* SEO Fallback */}
         <noscript>

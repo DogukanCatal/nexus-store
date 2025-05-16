@@ -95,7 +95,12 @@ const Basket = () => {
               </h1>
             </div>
             <Link className="w-full cursor-pointer" href="\checkout">
-              <Button className="w-full font-bold">Checkout</Button>
+              <Button
+                className="w-full font-bold text-sm md:text-base py-6 md:py-8 cursor-pointer"
+                onClick={() => setOpen(false)}
+              >
+                Checkout
+              </Button>
             </Link>
           </div>
         </div>

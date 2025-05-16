@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { CheckoutFormData, checkoutSchema } from "@/schemas/checkoutSchema";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { useBasketStore } from "@/store/basket-store";
 import { useShallow } from "zustand/shallow";
+import { useRouter } from "next/navigation";
 
 const CheckoutForm = () => {
   const {
@@ -26,8 +27,12 @@ const CheckoutForm = () => {
     }))
   );
 
+  const router = useRouter();
+  const [isPlacingOrder, setIsPlacingOrder] = useState<boolean>(false);
+
   const onSubmit = async (formData: CheckoutFormData) => {
     try {
+      setIsPlacingOrder(true);
       console.log(items);
       const response = await fetch("/api/checkout", {
         method: "POST",
@@ -51,6 +56,8 @@ const CheckoutForm = () => {
     } catch (err) {
       console.log("Unexpected error: ", err);
       alert("Something went wrong.");
+    } finally {
+      setIsPlacingOrder(false);
     }
   };
 
@@ -170,10 +177,18 @@ const CheckoutForm = () => {
         </h2>
 
         <Button
-          className="w-full font-bold text-sm md:text-base py-6 md:py-8 cursor-pointer"
+          className="w-full font-bold text-sm md:text-base py-6 md:py-8 cursor-pointer border-2 hover:bg-[#131313] hover:border-2 hover:border-white hover:text-white transition duration-300"
           type="submit"
+          disabled={isPlacingOrder}
         >
-          Place Order
+          {isPlacingOrder ? <span></span> : <span>Place Order</span>}
+        </Button>
+        <Button
+          className="w-full font-bold text-sm md:text-base py-6 md:py-8 cursor-pointer"
+          type="button"
+          onClick={() => router.replace("/")}
+        >
+          Continue Shopping
         </Button>
       </form>
     </div>
