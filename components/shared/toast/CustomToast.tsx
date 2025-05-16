@@ -12,7 +12,7 @@ const CustomToast = ({ success, message, toastId }: CustomToastProps) => {
   return (
     <div
       className={`flex items-center justify-between gap-3 p-3 rounded-lg text-white w-full max-w-sm ${
-        success ? "bg-[#22c55e]" : "bg-[#ef4444]"
+        success ? "bg-[#22c55e]" : "bg-[#EA4A78]"
       }`}
     >
       <div className="flex items-center gap-2">
