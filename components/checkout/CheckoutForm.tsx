@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { useBasketStore } from "@/store/basket-store";
+import { useShallow } from "zustand/shallow";
 
 const CheckoutForm = () => {
   const {
@@ -16,8 +18,40 @@ const CheckoutForm = () => {
     resolver: zodResolver(checkoutSchema),
   });
 
-  const onSubmit = (data: CheckoutFormData) => {
-    console.log(data);
+  const { items } = useBasketStore(
+    useShallow((state) => ({
+      items: state.items,
+      totalQuantity: state.totalQuantity,
+      totalPrice: state.totalPrice,
+    }))
+  );
+
+  const onSubmit = async (formData: CheckoutFormData) => {
+    try {
+      console.log(items);
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          items,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error("Checkout error:", result.error);
+        return alert("Checkout failed: " + result.error);
+      }
+
+      alert("Order placed! Order ID: " + result.order_id);
+    } catch (err) {
+      console.log("Unexpected error: ", err);
+      alert("Something went wrong.");
+    }
   };
 
   return (
@@ -27,6 +61,7 @@ const CheckoutForm = () => {
           fill
           src="/logo.png"
           alt="Brand Logo"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-contain"
           priority
         />
