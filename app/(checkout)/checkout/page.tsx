@@ -17,10 +17,10 @@ const CheckoutPage = () => {
         />
       </div>
 
-      <div className="order-3 md:order-1 overflow-y-auto max-h-screen md:py-8 px-4 flex flex-col">
+      <div className="order-3 md:order-1 overflow-y-auto max-h-screen md:py-8 md:px-4 flex flex-col">
         <CheckoutForm />
       </div>
-      <div className="order-2 md:order-2 bg-[#454545] px-4 w-full rounded-lg">
+      <div className="order-2 md:order-2 bg-[#454545] md:px-4 w-full md:rounded-lg">
         <CheckoutProducts />
       </div>
     </div>

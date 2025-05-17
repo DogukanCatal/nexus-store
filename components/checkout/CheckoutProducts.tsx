@@ -46,10 +46,10 @@ const CheckoutProducts = () => {
   if (!items) return;
   if (isMobile)
     return (
-      <div className="border-b-2 w-full">
+      <div className="w-full">
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger className="font-bold text-sm md:text-base hover:no-underline cursor-pointer px-4 py-6">
+            <AccordionTrigger className="font-bold text-sm md:text-base hover:no-underline cursor-pointer px-4 py-6 bg-[#262626] rounded-none">
               <div className="flex items-center justify-between w-full ">
                 <h1>Order Summary ({totalQuantity})</h1>
                 <h1>{formatCurrency(totalPrice)}</h1>

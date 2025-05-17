@@ -102,7 +102,7 @@ const CheckoutForm = () => {
                 {...register("name")}
                 placeholder="First Name"
                 type="text"
-                className={` font-semibold text-xs md:text-base py-4 md:py-6 ${
+                className={` font-semibold text-xs md:text-sm py-4 md:py-6 ${
                   errors.name ? "border-[#EA4A78]" : ""
                 }`}
               />
@@ -118,7 +118,7 @@ const CheckoutForm = () => {
                 {...register("surname")}
                 placeholder="Last Name"
                 type="text"
-                className={` font-semibold text-xs md:text-base py-4 md:py-6 ${
+                className={` font-semibold text-xs md:text-sm py-4 md:py-6 ${
                   errors.surname ? "border-[#EA4A78]" : ""
                 }`}
               />
@@ -135,7 +135,7 @@ const CheckoutForm = () => {
               {...register("email")}
               placeholder="Email"
               type="text"
-              className={`font-semibold text-xs md:text-base py-4 md:py-6 ${
+              className={`font-semibold text-xs md:text-sm py-4 md:py-6 ${
                 errors.email ? "border-[#EA4A78]" : ""
               }`}
             />
@@ -151,7 +151,7 @@ const CheckoutForm = () => {
               {...register("city")}
               placeholder="City"
               type="text"
-              className={`font-semibold text-xs md:text-base py-4 md:py-6${
+              className={`font-semibold text-xs md:text-sm py-4 md:py-6${
                 errors.city ? "border-[#EA4A78]" : ""
               }`}
             />
@@ -167,7 +167,7 @@ const CheckoutForm = () => {
               {...register("address")}
               placeholder="Address"
               type="text"
-              className={`font-semibold text-xs md:text-base py-4 md:py-6${
+              className={`font-semibold text-xs md:text-sm py-4 md:py-6${
                 errors.address ? "border-[#EA4A78]" : ""
               }`}
             />
@@ -183,7 +183,7 @@ const CheckoutForm = () => {
               {...register("phone")}
               placeholder="Phone"
               type="text"
-              className={`font-semibold text-xs md:text-base py-4 md:py-6 ${
+              className={`font-semibold text-xs md:text-sm py-4 md:py-6 ${
                 errors.phone ? "border-[#EA4A78]" : ""
               }`}
             />
@@ -212,6 +212,29 @@ const CheckoutForm = () => {
           >
             Continue Shopping
           </Button>
+          <div className="flex items-center justify-center w-full">
+            <p className="text-xs text-muted-foreground text-center mt-2">
+              This site is protected by reCAPTCHA and the Google{" "}
+              <a
+                className="underline"
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a
+                className="underline"
+                href="https://policies.google.com/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Terms of Service
+              </a>{" "}
+              apply.
+            </p>
+          </div>
         </form>
       </div>
     </>
