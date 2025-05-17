@@ -1,3 +1,6 @@
+import { verifyCaptcha } from "@/lib/recaptcha/verifyCaptcha";
+import { getIp } from "@/lib/upstash/getIp";
+import { ratelimit } from "@/lib/upstash/ratelimiter";
 import {
   CheckoutPayload,
   checkoutPayloadSchema,
@@ -11,13 +14,36 @@ const supabase = createClient(
 );
 
 export async function POST(req: Request) {
+  const ip = getIp(req);
   const body: CheckoutPayload = await req.json();
   const parse = checkoutPayloadSchema.safeParse(body);
   if (!parse.success) {
     return NextResponse.json({ error: parse.error.format() }, { status: 400 });
   }
 
-  const { name, surname, email, phone, address, city, items } = parse.data;
+  const { name, surname, email, phone, address, city, items, recaptchaToken } =
+    parse.data;
+
+  const { success } = await ratelimit.limit(ip);
+  if (!success) {
+    return NextResponse.json(
+      {
+        error: "Too many requests, please try again later.",
+      },
+      { status: 429 }
+    );
+  }
+
+  const isHuman = await verifyCaptcha(recaptchaToken);
+  if (!isHuman) {
+    return NextResponse.json(
+      {
+        error: "Bot verification failed",
+      },
+      { status: 403 }
+    );
+  }
+
   const { error, data } = await supabase.rpc("create_order", {
     input_name: name,
     input_surname: surname,

@@ -1,5 +1,5 @@
 import { Product } from "@/types/product";
-import { supabase } from "../supabase";
+import { supabase } from "../supabase/client";
 
 export const getProductDetailBySlug = async (
   slug: string

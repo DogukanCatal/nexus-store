@@ -7,6 +7,7 @@ export const checkoutPayloadSchema = z.object({
   phone: z.string().min(1),
   address: z.string().min(1),
   city: z.string().min(1),
+  recaptchaToken: z.string().min(1),
   items: z
     .array(
       z.object({

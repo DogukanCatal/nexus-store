@@ -26,22 +26,21 @@ const ProductPrice = ({
 
   return isDiscounted ? (
     <div className="flex items-center justify-start gap-2">
-      <div className="flex items-center gap-2">
-        <span className={`font-bold ${sizeClasses[priceSize]}`}>
-          {formatCurrency(finalPrice)}
-        </span>
-        <span
-          className={`font-bold ${sizeClasses[discountSize]} line-through text-gray-500`}
-        >
-          {formatCurrency(price)}
-        </span>
-      </div>
-
       {discountPercent && discountPercent > 0 && (
         <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
           %{Math.round(discountPercent)}
         </span>
       )}
+      <div className="flex flex-col items-center">
+        <span
+          className={`font-bold ${sizeClasses[discountSize]} line-through text-gray-500`}
+        >
+          {formatCurrency(price)}
+        </span>
+        <span className={`font-bold ${sizeClasses[priceSize]}`}>
+          {formatCurrency(finalPrice)}
+        </span>
+      </div>
     </div>
   ) : (
     <span

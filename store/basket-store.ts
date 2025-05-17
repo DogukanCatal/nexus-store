@@ -1,4 +1,4 @@
-import { encryptedStorage } from "@/lib/secure-local-storage";
+import { encryptedStorage } from "@/lib/store/secure-local-storage";
 import { BasketProduct } from "@/types/basketProduct";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -69,7 +69,7 @@ export const useBasketStore = create<BasketStore>()(
             updatedItems = [...state.items, { product, quantity: 1 }];
           }
 
-          if (!options?.silent) onResult?.(true, "Product added to basket.");
+          if (!options?.silent) onResult?.(true, "Product added to cart.");
 
           return {
             items: updatedItems,
