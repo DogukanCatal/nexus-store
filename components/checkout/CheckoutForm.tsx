@@ -10,6 +10,8 @@ import { useBasketStore } from "@/store/basket-store";
 import { useShallow } from "zustand/shallow";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import { CheckoutResult } from "@/types/api/checkoutResult";
+import { fetchApi } from "@/lib/fetch/fectApi";
 
 declare global {
   interface Window {
@@ -50,7 +52,7 @@ const CheckoutForm = () => {
         process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
         { action: "checkout" }
       );
-      const response = await fetch("/api/checkout", {
+      const response = await fetchApi<CheckoutResult>("/api/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,14 +64,13 @@ const CheckoutForm = () => {
         }),
       });
 
-      const result = await response.json();
+      //   const result = (await response.json()) as CheckoutResponse;
 
-      if (!response.ok) {
-        console.error("Checkout error:", result.error);
-        return alert("Checkout failed: " + result.error);
+      if (!response.success) {
+        console.error("Checkout error:", response.error);
+        return alert("Checkout failed: " + response.error);
       }
-
-      alert("Order placed! Order ID: " + result.order_id);
+      alert("Order placed! Order ID: " + response.data);
     } catch (err) {
       console.log("Unexpected error: ", err);
       alert("Something went wrong.");

@@ -1,11 +1,14 @@
+import OrderConfirmationEmail from "@/components/email/OrderConfirmationEmail";
 import { verifyCaptcha } from "@/lib/recaptcha/verifyCaptcha";
+import { sendEmail } from "@/lib/resend/sendEmail";
 import { getIp } from "@/lib/upstash/getIp";
 import { ratelimit } from "@/lib/upstash/ratelimiter";
 import {
   CheckoutPayload,
   checkoutPayloadSchema,
 } from "@/schemas/checkoutPayloadSchema";
-import { createClient } from "@supabase/supabase-js";
+import { OrderConfirmationProps } from "@/types/emails/order-confirmation";
+import { createClient, PostgrestError } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
 const supabase = createClient(
@@ -44,20 +47,38 @@ export async function POST(req: Request) {
     );
   }
 
-  const { error, data } = await supabase.rpc("create_order", {
-    input_name: name,
-    input_surname: surname,
-    input_email: email,
-    input_phone: phone,
-    input_address: address,
-    input_city: city,
-    input_items: items,
-  });
+  const {
+    error,
+    data,
+  }: { error: PostgrestError | null; data: OrderConfirmationProps | null } =
+    await supabase.rpc("create_order", {
+      input_name: name,
+      input_surname: surname,
+      input_email: email,
+      input_phone: phone,
+      input_address: address,
+      input_city: city,
+      input_items: items,
+    });
 
   if (error) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+  console.log(data);
 
-  return NextResponse.json({ success: true, order_id: data }, { status: 200 });
+  if (data) {
+    try {
+      await sendEmail(
+        [email],
+        "Your Order Has Been Placed!",
+        OrderConfirmationEmail,
+        data
+      );
+    } catch (err) {
+      console.log("Email send error: ", err);
+    }
+  }
+
+  return NextResponse.json({ success: true, data: data }, { status: 200 });
 }
