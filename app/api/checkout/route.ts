@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     try {
       await sendEmail(
         [email],
-        "Your Order Has Been Placed!",
+        "Thank you for your order. Your items are listed below.",
         OrderConfirmationEmail,
         data
       );
