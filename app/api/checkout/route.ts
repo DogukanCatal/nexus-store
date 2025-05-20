@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       { status: 429 }
     );
   }
-
+  console.log(recaptchaToken);
   const isHuman = await verifyCaptcha(recaptchaToken);
   if (!isHuman) {
     return NextResponse.json(

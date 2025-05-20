@@ -12,21 +12,10 @@ import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { CheckoutResponse } from "@/types/api/checkout-response";
 import { fetchApi } from "@/lib/api/fect-api";
-import { SendEmailVerificationCode } from "@/lib/api/send-email-verification-code";
+import { sendEmailVerificationCode } from "@/lib/api/send-email-verification-code";
 import { SendCode } from "@/schemas/email/send-code-schema";
 import VerificationDialog from "../email/VerificationDialog";
-
-declare global {
-  interface Window {
-    grecaptcha: {
-      ready: (cb: () => void) => void;
-      execute: (
-        siteKey: string,
-        options: { action: string }
-      ) => Promise<string>;
-    };
-  }
-}
+import { getRecaptchaToken } from "@/lib/recaptcha/get-recaptcha-token";
 
 const CheckoutForm = () => {
   const {
@@ -47,48 +36,48 @@ const CheckoutForm = () => {
 
   const isLoggedIn = false;
   const [showDialog, setShowDialog] = useState<boolean>(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
   const [submitData, setSubmitData] = useState<CheckoutFormData>();
   const router = useRouter();
   const [isPlacingOrder, setIsPlacingOrder] = useState<boolean>(false);
 
   const onSubmit = async (formData: CheckoutFormData) => {
-    setIsPlacingOrder(true);
-    await new Promise<void>((resolve) =>
-      window.grecaptcha.ready(() => resolve())
-    );
+    try {
+      setIsPlacingOrder(true);
 
-    const token = await window.grecaptcha.execute(
-      process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
-      { action: "checkout" }
-    );
+      if (!isLoggedIn) {
+        const token = await getRecaptchaToken("verify_email");
+        setSubmitData(formData);
 
-    setRecaptchaToken(token);
-    if (!isLoggedIn) {
-      setSubmitData(formData);
+        const data: SendCode = {
+          name: formData.name,
+          surname: formData.surname,
+          email: formData.email,
+          recaptchaToken: token,
+        };
+        const response = await sendEmailVerificationCode(data);
 
-      const data: SendCode = {
-        name: formData.name,
-        surname: formData.surname,
-        email: formData.email,
-        recaptchaToken,
-      };
-      console.log(recaptchaToken);
-      const response = await SendEmailVerificationCode(data);
+        if (!response.success) {
+          console.error("Send Code Error:", response.error);
+          return alert("Send Code Error:" + response.error);
+        }
 
-      if (!response.success) {
-        console.error("Send Code Error:", response.error);
-        return alert("Send Code Error:" + response.error);
+        setShowDialog(true);
+        setIsPlacingOrder(false);
+        return;
       }
-
-      setShowDialog(true);
+      await submitCheckout(formData);
+    } catch (err) {
+      console.error("onSubmit error", err);
+      alert("An unexpected error occurred.");
+    } finally {
       setIsPlacingOrder(false);
-      return;
     }
   };
 
   const submitCheckout = async (formData: CheckoutFormData) => {
     try {
+      setIsPlacingOrder(true);
+      const token = await getRecaptchaToken("checkout");
       const response = await fetchApi<CheckoutResponse>("/api/checkout", {
         method: "POST",
         headers: {
@@ -97,7 +86,7 @@ const CheckoutForm = () => {
         body: JSON.stringify({
           ...formData,
           items,
-          recaptchaToken,
+          recaptchaToken: token,
         }),
       });
 
@@ -124,9 +113,9 @@ const CheckoutForm = () => {
         <VerificationDialog
           email={submitData.email}
           showDialog
-          onVerified={() => {
-            submitCheckout(submitData);
+          onVerified={async () => {
             setShowDialog(false);
+            await submitCheckout(submitData);
           }}
           onClose={() => setShowDialog(false)}
         />

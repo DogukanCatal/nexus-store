@@ -23,7 +23,7 @@ export const POST = async (req: Request) => {
   }
 
   const { name, surname, email, recaptchaToken } = parse.data;
-
+  console.log(recaptchaToken);
   const { success } = await ratelimit.limit(ip);
   if (!success) {
     return NextResponse.json(
@@ -45,7 +45,7 @@ export const POST = async (req: Request) => {
   }
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
-
+  console.log(typeof code, code);
   const result = await redis.set(`verify:${email}`, code, { ex: 300 });
   console.log(result);
   if (result != "OK") {

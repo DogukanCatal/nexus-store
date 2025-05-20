@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { VerifyEmailCode } from "@/lib/api/verify-email-code";
+import { verifyEmailCode } from "@/lib/api/verify-email-code";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
@@ -27,17 +27,22 @@ const VerificationDialog = ({
   const [code, setCode] = useState<string>("");
   const verifyEmail = async () => {
     setIsVerifying(true);
+    try {
+      const response = await verifyEmailCode({
+        code: code,
+        email,
+      });
 
-    const response = await VerifyEmailCode({
-      code,
-      email,
-    });
-
-    if (!response.success) {
-      console.log("Verify Code Error:", response.error);
-      return;
+      if (!response.success) {
+        console.error("Verify Code Error:", response.error);
+        return;
+      }
+      onVerified();
+    } catch (err) {
+      console.error("Verification error:", err);
+    } finally {
+      setIsVerifying(false);
     }
-    onVerified();
   };
 
   console.log(showDialog);
