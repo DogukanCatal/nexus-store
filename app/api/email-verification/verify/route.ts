@@ -1,5 +1,4 @@
-import { getIp } from "@/lib/upstash/get-ip";
-import { ratelimit } from "@/lib/upstash/rate-limiter";
+import { ratelimitEmailVerifyCode } from "@/lib/upstash/rate-limiter";
 import { redis } from "@/lib/upstash/redis";
 import {
   VerifyCode,
@@ -8,13 +7,6 @@ import {
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
-  const ip = await getIp(req);
-  if (!ip) {
-    return NextResponse.json(
-      { error: "IP could not be determined." },
-      { status: 400 }
-    );
-  }
   const body: VerifyCode = await req.json();
   const parse = verifyCodeSchema.safeParse(body);
 
@@ -24,7 +16,7 @@ export const POST = async (req: Request) => {
 
   const { email, code } = parse.data;
 
-  const { success } = await ratelimit.limit(ip);
+  const { success } = await ratelimitEmailVerifyCode.limit(email);
   if (!success) {
     return NextResponse.json(
       {
@@ -44,7 +36,7 @@ export const POST = async (req: Request) => {
     return NextResponse.json({ error: "Incorrect Code" }, { status: 400 });
   }
 
-  await redis.del(`verift:${email}`);
+  await redis.del(`verify:${email}`);
 
   return NextResponse.json(
     { success: true, data: parse.data },

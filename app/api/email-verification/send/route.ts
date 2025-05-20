@@ -1,20 +1,12 @@
 import EmailVerificationTemplate from "@/components/email/EmailVerificationTemplate";
 import { verifyCaptcha } from "@/lib/recaptcha/verify-captcha";
 import { sendEmail } from "@/lib/resend/send-email";
-import { getIp } from "@/lib/upstash/get-ip";
-import { ratelimit } from "@/lib/upstash/rate-limiter";
+import { ratelimitEmailSendCode } from "@/lib/upstash/rate-limiter";
 import { redis } from "@/lib/upstash/redis";
 import { SendCode, sendCodeSchema } from "@/schemas/email/send-code-schema";
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
-  const ip = await getIp(req);
-  if (!ip) {
-    return NextResponse.json(
-      { error: "IP could not be determined." },
-      { status: 400 }
-    );
-  }
   const body: SendCode = await req.json();
   const parse = sendCodeSchema.safeParse(body);
 
@@ -24,7 +16,7 @@ export const POST = async (req: Request) => {
 
   const { name, surname, email, recaptchaToken } = parse.data;
   console.log(recaptchaToken);
-  const { success } = await ratelimit.limit(ip);
+  const { success } = await ratelimitEmailSendCode.limit(email);
   if (!success) {
     return NextResponse.json(
       {

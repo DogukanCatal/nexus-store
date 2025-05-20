@@ -3,7 +3,7 @@ import { verifyCaptcha } from "@/lib/recaptcha/verify-captcha";
 import { sendEmail } from "@/lib/resend/send-email";
 import { supabaseServiceClient } from "@/lib/supabase/service-client";
 import { getIp } from "@/lib/upstash/get-ip";
-import { ratelimit } from "@/lib/upstash/rate-limiter";
+import { ratelimitCheckout } from "@/lib/upstash/rate-limiter";
 import {
   CheckoutPayload,
   checkoutPayloadSchema,
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   const { name, surname, email, phone, address, city, items, recaptchaToken } =
     parse.data;
 
-  const { success } = await ratelimit.limit(ip);
+  const { success } = await ratelimitCheckout.limit(ip);
   if (!success) {
     return NextResponse.json(
       {
