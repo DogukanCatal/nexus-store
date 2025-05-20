@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "../ui/input";
-import { CheckoutFormData, checkoutSchema } from "@/schemas/checkoutSchema";
+import { CheckoutFormData, checkoutSchema } from "@/schemas/checkout-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
@@ -10,8 +10,11 @@ import { useBasketStore } from "@/store/basket-store";
 import { useShallow } from "zustand/shallow";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
-import { CheckoutResult } from "@/types/api/checkoutResult";
-import { fetchApi } from "@/lib/fetch/fectApi";
+import { CheckoutResponse } from "@/types/api/checkout-response";
+import { fetchApi } from "@/lib/api/fect-api";
+import { SendEmailVerificationCode } from "@/lib/api/send-email-verification-code";
+import { SendCode } from "@/schemas/email/send-code-schema";
+import VerificationDialog from "../email/VerificationDialog";
 
 declare global {
   interface Window {
@@ -42,17 +45,51 @@ const CheckoutForm = () => {
     }))
   );
 
+  const isLoggedIn = false;
+  const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+  const [submitData, setSubmitData] = useState<CheckoutFormData>();
   const router = useRouter();
   const [isPlacingOrder, setIsPlacingOrder] = useState<boolean>(false);
 
   const onSubmit = async (formData: CheckoutFormData) => {
+    setIsPlacingOrder(true);
+    await new Promise<void>((resolve) =>
+      window.grecaptcha.ready(() => resolve())
+    );
+
+    const token = await window.grecaptcha.execute(
+      process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
+      { action: "checkout" }
+    );
+
+    setRecaptchaToken(token);
+    if (!isLoggedIn) {
+      setSubmitData(formData);
+
+      const data: SendCode = {
+        name: formData.name,
+        surname: formData.surname,
+        email: formData.email,
+        recaptchaToken,
+      };
+      console.log(recaptchaToken);
+      const response = await SendEmailVerificationCode(data);
+
+      if (!response.success) {
+        console.error("Send Code Error:", response.error);
+        return alert("Send Code Error:" + response.error);
+      }
+
+      setShowDialog(true);
+      setIsPlacingOrder(false);
+      return;
+    }
+  };
+
+  const submitCheckout = async (formData: CheckoutFormData) => {
     try {
-      setIsPlacingOrder(true);
-      const recaptchaToken = await window.grecaptcha.execute(
-        process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
-        { action: "checkout" }
-      );
-      const response = await fetchApi<CheckoutResult>("/api/checkout", {
+      const response = await fetchApi<CheckoutResponse>("/api/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,8 +100,6 @@ const CheckoutForm = () => {
           recaptchaToken,
         }),
       });
-
-      //   const result = (await response.json()) as CheckoutResponse;
 
       if (!response.success) {
         console.error("Checkout error:", response.error);
@@ -85,6 +120,17 @@ const CheckoutForm = () => {
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
         strategy="afterInteractive"
       />
+      {showDialog && submitData && (
+        <VerificationDialog
+          email={submitData.email}
+          showDialog
+          onVerified={() => {
+            submitCheckout(submitData);
+            setShowDialog(false);
+          }}
+          onClose={() => setShowDialog(false)}
+        />
+      )}
       <div className="flex flex-col w-full px-4 justify-start h-full mt-5 md:mt-0">
         <div className="hidden md:flex relative size-20 self-center">
           <Image

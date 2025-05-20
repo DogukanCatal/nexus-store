@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
-import { ProductImage } from "@/types/productImages";
+import { ProductImage } from "@/types/product-image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type ProductCarouselProps = {

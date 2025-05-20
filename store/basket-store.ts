@@ -1,5 +1,5 @@
 import { encryptedStorage } from "@/lib/store/secure-local-storage";
-import { BasketProduct } from "@/types/basketProduct";
+import { BasketProduct } from "@/types/basket-product";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

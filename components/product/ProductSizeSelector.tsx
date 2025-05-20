@@ -1,5 +1,5 @@
-import { ProductSize } from "@/types/productSize";
-import { ProductStock } from "@/types/productStock";
+import { ProductSize } from "@/types/product-size";
+import { ProductStock } from "@/types/product-stock";
 import React from "react";
 
 type ProductSizeSelectorProps = {

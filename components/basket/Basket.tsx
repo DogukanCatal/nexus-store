@@ -48,7 +48,7 @@ const Basket = () => {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         <div className="relative cursor-pointer">
           <ShoppingBasketIcon />
           {totalQuantity > 0 && (

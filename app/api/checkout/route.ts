@@ -1,23 +1,25 @@
-import OrderConfirmationEmail from "@/components/email/OrderConfirmationEmail";
-import { verifyCaptcha } from "@/lib/recaptcha/verifyCaptcha";
-import { sendEmail } from "@/lib/resend/sendEmail";
-import { getIp } from "@/lib/upstash/getIp";
-import { ratelimit } from "@/lib/upstash/ratelimiter";
+import OrderConfirmationTemplate from "@/components/email/OrderConfirmationTemplate";
+import { verifyCaptcha } from "@/lib/recaptcha/verify-captcha";
+import { sendEmail } from "@/lib/resend/send-email";
+import { supabaseServiceClient } from "@/lib/supabase/service-client";
+import { getIp } from "@/lib/upstash/get-ip";
+import { ratelimit } from "@/lib/upstash/rate-limiter";
 import {
   CheckoutPayload,
   checkoutPayloadSchema,
-} from "@/schemas/checkoutPayloadSchema";
+} from "@/schemas/checkout-payload-schema";
 import { OrderConfirmationProps } from "@/types/emails/order-confirmation";
-import { createClient, PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export async function POST(req: Request) {
-  const ip = getIp(req);
+  const ip = await getIp(req);
+  if (!ip) {
+    return NextResponse.json(
+      { error: "IP could not be determined." },
+      { status: 400 }
+    );
+  }
   const body: CheckoutPayload = await req.json();
   const parse = checkoutPayloadSchema.safeParse(body);
   if (!parse.success) {
@@ -51,7 +53,7 @@ export async function POST(req: Request) {
     error,
     data,
   }: { error: PostgrestError | null; data: OrderConfirmationProps | null } =
-    await supabase.rpc("create_order", {
+    await supabaseServiceClient.rpc("create_order", {
       input_name: name,
       input_surname: surname,
       input_email: email,
@@ -65,14 +67,13 @@ export async function POST(req: Request) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-  console.log(data);
 
   if (data) {
     try {
       await sendEmail(
         [email],
         "Thank you for your order. Your items are listed below.",
-        OrderConfirmationEmail,
+        OrderConfirmationTemplate,
         data
       );
     } catch (err) {

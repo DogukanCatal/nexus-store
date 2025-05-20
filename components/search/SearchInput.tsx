@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Search } from "lucide-react";
-import useMediaQuery from "@/lib/useMediaQuery";
+import useMediaQuery from "@/lib/use-media-query";
 import searchProducts from "@/lib/api/search-products";
 import { Products } from "@/types/products";
 import { Skeleton } from "../ui/skeleton";
@@ -43,7 +43,7 @@ const SearchInput = () => {
   return (
     <div>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger className="flex">
+        <SheetTrigger asChild className="flex">
           <Search className="hover:cursor-pointer" />
         </SheetTrigger>
         <SheetContent

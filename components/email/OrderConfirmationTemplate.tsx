@@ -17,7 +17,7 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-export const OrderConfirmationEmail = () => (
+export const OrderConfirmationTemplate = () => (
   <Html>
     <Head />
 
@@ -272,7 +272,7 @@ export const OrderConfirmationEmail = () => (
   </Html>
 );
 
-export default OrderConfirmationEmail;
+export default OrderConfirmationTemplate;
 
 const main = {
   fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',

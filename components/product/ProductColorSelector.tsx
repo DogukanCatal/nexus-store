@@ -1,5 +1,5 @@
-import { ProductColor } from "@/types/productColor";
-import { ProductStock } from "@/types/productStock";
+import { ProductColor } from "@/types/product-color";
+import { ProductStock } from "@/types/product-stock";
 import React from "react";
 
 type ProductColorSelectorProps = {

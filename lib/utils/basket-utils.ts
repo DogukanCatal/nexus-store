@@ -1,5 +1,5 @@
 import { BasketItem } from "@/store/basket-store";
-import { BasketProduct } from "@/types/basketProduct";
+import { BasketProduct } from "@/types/basket-product";
 
 export function getBasketProductFromBasketItem(
   product: BasketItem
