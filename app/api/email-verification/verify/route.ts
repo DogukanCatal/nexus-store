@@ -15,7 +15,7 @@ export const POST = async (req: Request) => {
   }
 
   const { email, code } = parse.data;
-
+  console.log(email, code);
   const { success } = await ratelimitEmailVerifyCode.limit(email);
   if (!success) {
     return NextResponse.json(
