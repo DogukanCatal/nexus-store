@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const checkoutPayloadSchema = z.object({
-  name: z.string().min(1),
-  surname: z.string().min(1),
-  email: z.string().email(),
-  phone: z.string().min(1),
-  address: z.string().min(1),
-  city: z.string().min(1),
+  name: z.string().trim().min(1),
+  surname: z.string().trim().min(1),
+  email: z.string().trim().toLowerCase().email(),
+  phone: z.string().trim().min(1),
+  address: z.string().trim().min(1),
+  city: z.string().trim().min(1),
   recaptchaToken: z.string().min(1),
   items: z
     .array(

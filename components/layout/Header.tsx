@@ -3,13 +3,16 @@ import Link from "next/link";
 import React from "react";
 import SearchInput from "../search/SearchInput";
 import Basket from "../basket/Basket";
+import HomeButton from "../shared/home/HomeButton";
 
 const Header = () => {
   return (
-    <header className="bg-transparent sticky z-50 top-0 backdrop-blur-md shadow-sm border-b ">
-      <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
+    <header className="bg-transparent sticky z-50 top-0 backdrop-blur-md shadow-sm border-b">
+      <div className=" container mx-auto px-4 py-4 flex items-center justify-between">
         {/* HomePage Categories vs... */}
-        <div className="w-1/3" />
+        <div className="w-1/3">
+          <HomeButton />
+        </div>
 
         {/* Logo */}
         <div className="w-1/3 flex justify-center">

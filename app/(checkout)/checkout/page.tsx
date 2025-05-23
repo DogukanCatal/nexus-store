@@ -1,26 +1,28 @@
 import CheckoutForm from "@/components/checkout/CheckoutForm";
 import CheckoutProducts from "@/components/checkout/CheckoutProducts";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const CheckoutPage = () => {
   return (
-    <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-8 w-full min-h-screen py-4">
-      <div className="order-1 md:order-1 md:hidden relative size-20 self-center ">
-        <Image
-          fill
-          src="/logo.png"
-          alt="Brand Logo"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-contain"
-          priority
-        />
-      </div>
+    <div className="flex flex-col relative min-h-screen">
+      <div className="hidden md:block absolute top-21 right-0 w-1/2 h-full bg-[#454545] -z-10" />
 
-      <div className="order-3 md:order-1 overflow-y-auto max-h-screen md:py-8 md:px-4 flex flex-col">
-        <CheckoutForm />
+      <div className=" flex relative justify-center items-center w-full md:py-4 md:border-b-2 md:border-[#454545]">
+        <Link href={"/"}>
+          <Image
+            src="/logo.png"
+            alt="Brand Logo"
+            width={50}
+            height={50}
+            className="object-contain"
+            priority
+          />
+        </Link>
       </div>
-      <div className="order-2 md:order-2 bg-[#454545] md:px-4 w-full md:rounded-lg">
+      <div className="flex flex-col md:flex-row min-h-screen container mx-auto">
+        <CheckoutForm />
         <CheckoutProducts />
       </div>
     </div>

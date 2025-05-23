@@ -23,10 +23,16 @@ const ProductItem = ({ product }: ProductItemProps) => {
           main_img={product.main_image_url}
           second_img={product.second_image_url}
         />
+
         {!product.in_stock && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
             <span className="font-bold text-xs text-white">Out Of Stock</span>
           </div>
+        )}
+        {product.discount_percent && product.discount_percent > 0 && (
+          <span className="absolute bottom-0 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded rounded-b-none">
+            %{Math.round(product.discount_percent)}
+          </span>
         )}
       </Link>
       <div className="flex flex-col w-full p-4 bg-[#262626] gap-1">

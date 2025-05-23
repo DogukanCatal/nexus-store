@@ -14,7 +14,6 @@ const ProductPrice = ({
   price,
   finalPrice,
   isDiscounted,
-  discountPercent,
   priceSize = "medium",
   discountSize = "small",
 }: ProductPriceProps) => {
@@ -26,25 +25,28 @@ const ProductPrice = ({
 
   return isDiscounted ? (
     <div className="flex items-center justify-start gap-2">
-      {discountPercent && discountPercent > 0 && (
+      {/* todo put discount somewhere here or seperate it from productprice */}
+      {/* {discountPercent && discountPercent > 0 && (
         <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
           %{Math.round(discountPercent)}
         </span>
-      )}
-      <div className="flex flex-col items-center">
+      )} */}
+      <div className="flex items-center gap-2 w-full">
         <span
-          className={`font-bold ${sizeClasses[discountSize]} line-through text-gray-500`}
+          className={`font-bold ${sizeClasses[discountSize]} md:${sizeClasses[priceSize]}`}
+        >
+          {formatCurrency(finalPrice)}
+        </span>
+        <span
+          className={`font-bold ${sizeClasses[discountSize]} md:${sizeClasses[discountSize]} line-through text-gray-500`}
         >
           {formatCurrency(price)}
-        </span>
-        <span className={`font-bold ${sizeClasses[priceSize]}`}>
-          {formatCurrency(finalPrice)}
         </span>
       </div>
     </div>
   ) : (
     <span
-      className={`font-bold ${sizeClasses[priceSize]} flex items-center justify-start`}
+      className={`font-bold ${sizeClasses[discountSize]} md:${sizeClasses[priceSize]} flex items-center justify-start`}
     >
       {formatCurrency(price)}
     </span>

@@ -5,7 +5,6 @@ import { CheckoutFormData, checkoutSchema } from "@/schemas/checkout-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
-import Image from "next/image";
 import { useBasketStore } from "@/store/basket-store";
 import { useShallow } from "zustand/shallow";
 import { useRouter } from "next/navigation";
@@ -16,6 +15,7 @@ import { sendEmailVerificationCode } from "@/lib/api/send-email-verification-cod
 import { SendCode } from "@/schemas/email/send-code-schema";
 import VerificationDialog from "../email/VerificationDialog";
 import { getRecaptchaToken } from "@/lib/recaptcha/get-recaptcha-token";
+import { LoaderCircle } from "lucide-react";
 
 const CheckoutForm = () => {
   const {
@@ -109,7 +109,6 @@ const CheckoutForm = () => {
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
         strategy="afterInteractive"
       />
-
       {showDialog && submitData && (
         <VerificationDialog
           email={submitData.email}
@@ -121,18 +120,27 @@ const CheckoutForm = () => {
           onClose={() => setShowDialog(false)}
         />
       )}
-      <div className="flex flex-col w-full px-4 justify-start h-full mt-5 md:mt-0">
-        <div className="hidden md:flex relative size-20 self-center">
-          <Image
-            fill
-            src="/logo.png"
-            alt="Brand Logo"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-contain"
-            priority
-          />
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+      <div className="order-2 flex-1 px-4 flex flex-col">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
+          <div className="flex flex-col">
+            <span className="font-bold text-xs md:text-base mb-2">
+              * Verification code will be sent to your email address.
+            </span>
+            <Input
+              {...register("email")}
+              placeholder="Email"
+              type="text"
+              className={`font-semibold text-xs md:text-sm py-4 md:py-6 ${
+                errors.email ? "border-[#EA4A78]" : ""
+              }`}
+            />
+            {errors.email && (
+              <span className="text-[#EA4A78] font-semibold text-xs md:tex-sm">
+                {errors.email.message}
+              </span>
+            )}
+          </div>
           <div className="flex items-center justify-center gap-4">
             <div className="flex flex-col flex-1">
               <Input
@@ -169,26 +177,10 @@ const CheckoutForm = () => {
 
           <div>
             <Input
-              {...register("email")}
-              placeholder="Email"
-              type="text"
-              className={`font-semibold text-xs md:text-sm py-4 md:py-6 ${
-                errors.email ? "border-[#EA4A78]" : ""
-              }`}
-            />
-            {errors.email && (
-              <span className="text-[#EA4A78] font-semibold text-xs md:tex-sm">
-                {errors.email.message}
-              </span>
-            )}
-          </div>
-
-          <div>
-            <Input
               {...register("city")}
               placeholder="City"
               type="text"
-              className={`font-semibold text-xs md:text-sm py-4 md:py-6${
+              className={`font-semibold text-xs md:text-sm py-4 md:py-6 ${
                 errors.city ? "border-[#EA4A78]" : ""
               }`}
             />
@@ -204,7 +196,7 @@ const CheckoutForm = () => {
               {...register("address")}
               placeholder="Address"
               type="text"
-              className={`font-semibold text-xs md:text-sm py-4 md:py-6${
+              className={`font-semibold text-xs md:text-sm py-4 md:py-6 ${
                 errors.address ? "border-[#EA4A78]" : ""
               }`}
             />
@@ -240,7 +232,13 @@ const CheckoutForm = () => {
             type="submit"
             disabled={isPlacingOrder}
           >
-            {isPlacingOrder ? <span></span> : <span>Place Order</span>}
+            {isPlacingOrder ? (
+              <span>
+                <LoaderCircle className="size-5 animate-spin" /> ...
+              </span>
+            ) : (
+              <span>Place Order</span>
+            )}
           </Button>
           <Button
             className="w-full font-bold text-sm md:text-base py-6 md:py-8 cursor-pointer"

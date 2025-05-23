@@ -21,6 +21,7 @@ import {
 } from "@/schemas/email/verify-code-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { LoaderCircle } from "lucide-react";
 
 type VerificationDialogProps = {
   email: string;
@@ -68,16 +69,20 @@ const VerificationDialog = ({
 
   return (
     <Dialog open={showDialog} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent
+        className="bg-[#131313]"
+        onInteractOutside={(e) => e.preventDefault()} //do not close dialog when outside of dialog is clicked
+        onEscapeKeyDown={(e) => e.preventDefault()} //do not close dialog when esc is pressed
+      >
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>Email Verification</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            We have sent to your email ({email}) a verification code. Please use
+            that code to verify your order.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(verifyEmail)}>
-          <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="flex flex-col items-center justify-center space-y-6">
             <Controller
               control={control}
               name="code"
@@ -90,24 +95,27 @@ const VerificationDialog = ({
                   inputMode="numeric"
                 >
                   <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
+                    {[...Array(6)].map((_, i) => (
+                      <InputOTPSlot
+                        key={i}
+                        index={i}
+                        className="size-12 text-xl text-center text-white"
+                      />
+                    ))}
                   </InputOTPGroup>
                 </InputOTP>
               )}
             />
             {errors.code && <span>{errors.code.message}</span>}
             <Button
-              className="w-full max-w-sm text-xs md:text-sm font-bold cursor-pointer"
+              className="w-full max-w-sm text-sm md:text-base font-bold cursor-pointer"
               type="submit"
               disabled={isVerifying}
             >
+              <LoaderCircle className="size-5 animate-spin" />
               Verify
             </Button>
+            {/* todo add resend */}
           </div>
         </form>
       </DialogContent>

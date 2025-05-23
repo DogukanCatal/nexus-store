@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <Header />
         <main className="mx-auto container px-4">{children}</main>
-        <Toaster style={{ zIndex: 99999 }} />
+        <Toaster style={{ zIndex: 100 }} />
         <Footer />
       </body>
     </html>

@@ -25,7 +25,7 @@ const layout = ({
       >
         {/* <Header /> */}
 
-        <main className="mx-auto container">{children}</main>
+        <main className="mx-auto">{children}</main>
         <Toaster style={{ zIndex: 99999 }} />
       </body>
     </html>

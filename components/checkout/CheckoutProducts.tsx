@@ -46,7 +46,7 @@ const CheckoutProducts = () => {
   if (!items) return;
   if (isMobile)
     return (
-      <div className="w-full">
+      <div className="w-full order-1 mx-auto">
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="font-bold text-sm md:text-base hover:no-underline cursor-pointer px-4 py-6 bg-[#262626] rounded-none">
@@ -76,29 +76,33 @@ const CheckoutProducts = () => {
       </div>
     );
   return (
-    // <div className="sticky max-h-[calc(100vh-10rem)] top-20 flex flex-col w-full">
-    <div className="flex flex-col w-full h-7/8 sticky top-0 py-8">
-      <div className="flex items-center justify-center w-full ">
-        <h1 className="font-bold text-xl md:text-2xl">Order Summary</h1>
-      </div>
-      <div className="overflow-y-auto flex-1 w-full scrollbar-hidden bg-[#454545] border-b border-t px-4">
-        {items.map((product, i) => (
-          <div key={i} className="flex-col  w-full gap-2 mt-5 mx-auto">
-            <BasketProduct
-              product={product}
-              onAddItem={(product) => addItemHandler(product)}
-              onRemoveItem={(product, removeCompletely?) =>
-                removeItemHandler(product, removeCompletely)
-              }
-            />
-          </div>
-        ))}
-      </div>
-      <div className="py-4 flex items-center justify-between mt-5">
-        <h1 className="text-l md:text-xl font-bold">Total ({totalQuantity})</h1>
-        <h1 className="text-l md:text-xl font-bold">
-          {formatCurrency(totalPrice)}
-        </h1>
+    //h-[calc(100vh-84px)] 84px => 50 logo + py-4, will be used only on this page
+    <div className="order-1 md:order-2 min-h-screen flex-1 bg-[#454545] px-4">
+      <div className="flex flex-col w-full sticky top-0 bg-[#454545] rounded-lg">
+        <div className="flex items-center justify-center w-full size-20">
+          <h1 className="font-bold text-xl md:text-2xl">Order Summary</h1>
+        </div>
+        <div className="overflow-y-auto max-h-[50vh] w-full scrollbar-hidden bg-[#454545] border-b border-t ">
+          {items.map((product, i) => (
+            <div key={i} className="flex-col  w-full gap-2 mt-5 mx-auto">
+              <BasketProduct
+                product={product}
+                onAddItem={(product) => addItemHandler(product)}
+                onRemoveItem={(product, removeCompletely?) =>
+                  removeItemHandler(product, removeCompletely)
+                }
+              />
+            </div>
+          ))}
+        </div>
+        <div className="py-4 flex items-center justify-between mt-5">
+          <h1 className="text-l md:text-xl font-bold">
+            Total ({totalQuantity})
+          </h1>
+          <h1 className="text-l md:text-xl font-bold">
+            {formatCurrency(totalPrice)}
+          </h1>
+        </div>
       </div>
     </div>
   );
