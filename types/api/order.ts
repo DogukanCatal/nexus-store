@@ -1,4 +1,4 @@
-export type CheckoutResponse = {
+export type Order = {
   order_ref: string;
   items: {
     product_id: string;

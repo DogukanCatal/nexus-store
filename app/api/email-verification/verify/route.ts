@@ -11,11 +11,11 @@ export const POST = async (req: Request) => {
   const parse = verifyCodeSchema.safeParse(body);
 
   if (!parse.success) {
-    return NextResponse.json({ error: parse.error.format() }, { status: 400 });
+    return NextResponse.json({ error: parse.error.message }, { status: 400 });
   }
 
   const { email, code } = parse.data;
-  console.log(email, code);
+
   const { success } = await ratelimitEmailVerifyCode.limit(email);
   if (!success) {
     return NextResponse.json(

@@ -2,7 +2,7 @@ import ProductCarousel from "@/components/product/ProductCarousel";
 import ProductDescription from "@/components/product/ProductDescription";
 import ProductOptionsWrapper from "@/components/product/ProductOptionsWrapper";
 import ProductPrice from "@/components/product/ProductPrice";
-import { getProductDetailBySlug } from "@/lib/api/get-product-detail-by-slug";
+import { getProductDetailBySlug } from "@/lib/api/product/get-product-detail-by-slug";
 // import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";

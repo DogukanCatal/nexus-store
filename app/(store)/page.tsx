@@ -1,5 +1,5 @@
 import ProductGrid from "@/components/product/ProductGrid";
-import { getAllProducts } from "@/lib/api/get-all-products";
+import { getAllProducts } from "@/lib/api/product/get-all-products";
 
 export default async function Home() {
   const products = await getAllProducts();

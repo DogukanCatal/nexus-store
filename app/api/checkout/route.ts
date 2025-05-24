@@ -79,7 +79,17 @@ export async function POST(req: Request) {
     } catch (err) {
       console.log("Email send error: ", err);
     }
+    return NextResponse.json(
+      { success: true, data: data.order_ref },
+      { status: 200 }
+    );
   }
 
-  return NextResponse.json({ success: true, data: data }, { status: 200 });
+  if (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Unexpected Error Occurred" },
+      { status: 400 }
+    );
+  }
 }

@@ -10,7 +10,7 @@ import {
 } from "../ui/sheet";
 import { Search } from "lucide-react";
 import useMediaQuery from "@/lib/use-media-query";
-import searchProducts from "@/lib/api/search-products";
+import searchProducts from "@/lib/api//product/search-products";
 import { Products } from "@/types/products";
 import { Skeleton } from "../ui/skeleton";
 import SearchResult from "./SearchResult";

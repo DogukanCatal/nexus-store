@@ -9,13 +9,12 @@ import { useBasketStore } from "@/store/basket-store";
 import { useShallow } from "zustand/shallow";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
-import { CheckoutResponse } from "@/types/api/checkout-response";
-import { fetchApi } from "@/lib/api/fect-api";
-import { sendEmailVerificationCode } from "@/lib/api/send-email-verification-code";
+import { sendEmailVerificationCode } from "@/lib/api/email/send-email-verification-code";
 import { SendCode } from "@/schemas/email/send-code-schema";
 import VerificationDialog from "../email/VerificationDialog";
 import { getRecaptchaToken } from "@/lib/recaptcha/get-recaptcha-token";
 import { LoaderCircle } from "lucide-react";
+import { submitCheckoutAsync } from "@/lib/api/checkout/submit-checkout";
 
 const CheckoutForm = () => {
   const {
@@ -78,23 +77,16 @@ const CheckoutForm = () => {
     try {
       setIsPlacingOrder(true);
       const token = await getRecaptchaToken("checkout");
-      const response = await fetchApi<CheckoutResponse>("/api/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          items,
-          recaptchaToken: token,
-        }),
-      });
+      const response = await submitCheckoutAsync(formData, items, token);
 
       if (!response.success) {
         console.error("Checkout error:", response.error);
         return alert("Checkout failed: " + response.error);
       }
-      alert("Order placed! Order ID: " + response.data);
+      const orderRef = response.data;
+      if (orderRef) {
+        router.replace(`/checkout/success/${orderRef}`);
+      }
     } catch (err) {
       console.log("Unexpected error: ", err);
       alert("Something went wrong.");

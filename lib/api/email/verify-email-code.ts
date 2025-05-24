@@ -1,5 +1,5 @@
 import { VerifyCode } from "@/schemas/email/verify-code-schema";
-import { fetchApi } from "./fect-api";
+import { fetchApi } from "../fect-api";
 
 export const verifyEmailCode = async (data: VerifyCode) => {
   console.log(data.code, data.email);
