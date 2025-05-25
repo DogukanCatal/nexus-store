@@ -91,7 +91,7 @@ const CheckoutForm = () => {
       if (response.data) {
         setOrderRef(response.data);
         setIsOrderSuccess(true);
-        clearBasket();
+        setShowSuccessDialog(true);
         return;
       }
       setIsPlacingOrder(false);
@@ -115,6 +115,7 @@ const CheckoutForm = () => {
           onClose={() => {
             router.replace(`/`);
             setShowSuccessDialog(false);
+            clearBasket();
           }}
         />
       )}
