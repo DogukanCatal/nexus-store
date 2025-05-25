@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/types/api/base";
+import type { ApiResponse } from "@/types/api/base";
 
 export async function fetchApi<T>(
   input: RequestInfo,

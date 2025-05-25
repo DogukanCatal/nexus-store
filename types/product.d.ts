@@ -1,7 +1,7 @@
-import { ProductColor } from "./product-color";
-import { ProductImage } from "./product-image";
-import { ProductSize } from "./product-size";
-import { ProductStock } from "./product-stock";
+import type { ProductColor } from "./product-color";
+import type { ProductImage } from "./product-image";
+import type { ProductSize } from "./product-size";
+import type { ProductStock } from "./product-stock";
 
 export type Product = {
   id: string;

@@ -8,7 +8,7 @@ import {
   CheckoutPayload,
   checkoutPayloadSchema,
 } from "@/schemas/checkout-payload-schema";
-import { OrderConfirmationProps } from "@/types/emails/order-confirmation";
+import type { OrderConfirmationProps } from "@/types/emails/order-confirmation";
 import { PostgrestError } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 

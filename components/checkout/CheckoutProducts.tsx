@@ -77,12 +77,12 @@ const CheckoutProducts = () => {
     );
   return (
     //h-[calc(100vh-84px)] 84px => 50 logo + py-4, will be used only on this page
-    <div className="order-1 md:order-2 min-h-screen flex-1 bg-[#454545] px-4">
+    <div className="order-1 md:order-2 w-full flex-1 bg-[#454545] px-4">
       <div className="flex flex-col w-full sticky top-0 bg-[#454545] rounded-lg">
         <div className="flex items-center justify-center w-full size-20">
           <h1 className="font-bold text-xl md:text-2xl">Order Summary</h1>
         </div>
-        <div className="overflow-y-auto max-h-[50vh] w-full scrollbar-hidden bg-[#454545] border-b border-t ">
+        <div className="overflow-y-auto max-h-[75vh] w-full scrollbar-hidden bg-[#454545] border-b border-t ">
           {items.map((product, i) => (
             <div key={i} className="flex-col  w-full gap-2 mt-5 mx-auto">
               <BasketProduct
@@ -95,7 +95,7 @@ const CheckoutProducts = () => {
             </div>
           ))}
         </div>
-        <div className="py-4 flex items-center justify-between mt-5">
+        <div className="flex items-center justify-between mt-5">
           <h1 className="text-l md:text-xl font-bold">
             Total ({totalQuantity})
           </h1>

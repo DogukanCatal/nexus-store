@@ -1,6 +1,6 @@
 export type Order = {
   order_ref: string;
-  items: {
+  order_items: {
     product_id: string;
     product_name: string;
     product_image: string;

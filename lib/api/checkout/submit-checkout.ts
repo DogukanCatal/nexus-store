@@ -1,7 +1,7 @@
 import { CheckoutFormData } from "@/schemas/checkout-schema";
 import { fetchApi } from "../fect-api";
 import { BasketItem } from "@/store/basket-store";
-import { ApiResponse } from "@/types/api/base";
+import type { ApiResponse } from "@/types/api/base";
 
 export const submitCheckoutAsync = async (
   formData: CheckoutFormData,

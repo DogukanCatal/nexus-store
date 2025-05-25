@@ -25,11 +25,10 @@ const CheckoutForm = () => {
     resolver: zodResolver(checkoutSchema),
   });
 
-  const { items } = useBasketStore(
+  const { items, clearBasket } = useBasketStore(
     useShallow((state) => ({
       items: state.items,
-      totalQuantity: state.totalQuantity,
-      totalPrice: state.totalPrice,
+      clearBasket: state.clearBasket,
     }))
   );
 
@@ -40,6 +39,7 @@ const CheckoutForm = () => {
   const [isPlacingOrder, setIsPlacingOrder] = useState<boolean>(false);
 
   const onSubmit = async (formData: CheckoutFormData) => {
+    if (isPlacingOrder) return;
     try {
       setIsPlacingOrder(true);
 
@@ -85,12 +85,14 @@ const CheckoutForm = () => {
       }
       const orderRef = response.data;
       if (orderRef) {
-        router.replace(`/checkout/success/${orderRef}`);
+        router.replace(`/success/${orderRef}`);
+        clearBasket();
+        return;
       }
+      setIsPlacingOrder(false);
     } catch (err) {
       console.log("Unexpected error: ", err);
       alert("Something went wrong.");
-    } finally {
       setIsPlacingOrder(false);
     }
   };

@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import React from "react";
-import { Toaster } from "sonner";
-import "../../globals.css";
+import "../globals.css";
+import MinimalHeader from "@/components/layout/MinimalHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,14 +19,17 @@ const layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="h-full overflow-x-hidden"
+      suppressHydrationWarning
+    >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark bg-[#131313] h-full w-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark bg-[#131313] h-full w-full flex flex-col`}
       >
-        {/* <Header /> */}
+        <MinimalHeader />
 
-        <main className="mx-auto">{children}</main>
-        <Toaster style={{ zIndex: 99999 }} />
+        <main className="min-h-0 flex-1 ">{children}</main>
       </body>
     </html>
   );

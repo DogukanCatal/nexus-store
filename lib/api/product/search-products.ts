@@ -1,5 +1,5 @@
 import { supabase } from "../../supabase/client";
-import { Products } from "@/types/products";
+import type { Products } from "@/types/products";
 
 const searchProducts = async (query: string): Promise<Products[]> => {
   if (!query) return [];
