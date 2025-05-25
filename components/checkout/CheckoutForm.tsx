@@ -15,6 +15,7 @@ import VerificationDialog from "../email/VerificationDialog";
 import { getRecaptchaToken } from "@/lib/recaptcha/get-recaptcha-token";
 import { LoaderCircle } from "lucide-react";
 import { submitCheckoutAsync } from "@/lib/api/checkout/submit-checkout";
+import SuccessDialog from "./SuccessDialog";
 
 const CheckoutForm = () => {
   const {
@@ -33,7 +34,10 @@ const CheckoutForm = () => {
   );
 
   const isLoggedIn = false;
-  const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [showVerifyDialog, setShowVerifyDialog] = useState<boolean>(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
+  const [orderRef, setOrderRef] = useState<string>("");
+  const [isOrderSuccess, setIsOrderSuccess] = useState<boolean>(false);
   const [submitData, setSubmitData] = useState<CheckoutFormData>();
   const router = useRouter();
   const [isPlacingOrder, setIsPlacingOrder] = useState<boolean>(false);
@@ -60,7 +64,7 @@ const CheckoutForm = () => {
           return alert("Send Code Error:" + response.error);
         }
 
-        setShowDialog(true);
+        setShowVerifyDialog(true);
         setIsPlacingOrder(false);
         return;
       }
@@ -83,9 +87,10 @@ const CheckoutForm = () => {
         console.error("Checkout error:", response.error);
         return alert("Checkout failed: " + response.error);
       }
-      const orderRef = response.data;
-      if (orderRef) {
-        router.replace(`/success/${orderRef}`);
+
+      if (response.data) {
+        setOrderRef(response.data);
+        setIsOrderSuccess(true);
         clearBasket();
         return;
       }
@@ -103,15 +108,25 @@ const CheckoutForm = () => {
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
         strategy="afterInteractive"
       />
-      {showDialog && submitData && (
+      {isOrderSuccess && orderRef && showSuccessDialog && (
+        <SuccessDialog
+          orderRef={orderRef}
+          showSuccessDialog
+          onClose={() => {
+            router.replace(`/`);
+            setShowSuccessDialog(false);
+          }}
+        />
+      )}
+      {showVerifyDialog && submitData && (
         <VerificationDialog
           email={submitData.email}
-          showDialog
+          showVerifyDialog
           onVerified={async () => {
-            setShowDialog(false);
+            setShowVerifyDialog(false);
             await submitCheckout(submitData);
           }}
-          onClose={() => setShowDialog(false)}
+          onClose={() => setShowVerifyDialog(false)}
         />
       )}
 

@@ -57,7 +57,7 @@ const CheckoutProducts = () => {
             </AccordionTrigger>
 
             <AccordionContent className="transition-all duration-500 ease-in-out font-semibold">
-              <div className="overflow-y-auto flex-1 w-full scrollbar-hidden bg-[#454545] px-4">
+              <div className="overflow-y-auto flex-1 w-full scrollbar-hidden bg-[#262626] px-4">
                 {items.map((product, i) => (
                   <div key={i} className="flex-col  w-full gap-2 mt-5 mx-auto">
                     <BasketProduct
@@ -77,12 +77,12 @@ const CheckoutProducts = () => {
     );
   return (
     //h-[calc(100vh-84px)] 84px => 50 logo + py-4, will be used only on this page
-    <div className="order-1 md:order-2 w-full flex-1 bg-[#454545] px-4">
-      <div className="flex flex-col w-full sticky top-0 bg-[#454545] rounded-lg">
+    <div className="order-1 md:order-2 w-full flex-1 bg-[#262626] px-4">
+      <div className="flex flex-col w-full sticky top-0 bg-[#262626] rounded-lg">
         <div className="flex items-center justify-center w-full size-20">
           <h1 className="font-bold text-xl md:text-2xl">Order Summary</h1>
         </div>
-        <div className="overflow-y-auto max-h-[75vh] w-full scrollbar-hidden bg-[#454545] border-b border-t ">
+        <div className="overflow-y-auto max-h-[75vh] w-full scrollbar-hidden bg-[#262626] border-b border-t ">
           {items.map((product, i) => (
             <div key={i} className="flex-col  w-full gap-2 mt-5 mx-auto">
               <BasketProduct

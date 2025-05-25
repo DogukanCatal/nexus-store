@@ -4,7 +4,7 @@ import React from "react";
 
 const MinimalHeader = () => {
   return (
-    <div className=" flex relative justify-center items-center w-full md:py-4 md:border-b-2 md:border-[#454545] z-50 bg-[#131313]">
+    <div className=" flex relative justify-center items-center w-full md:py-4 md:border-b-2 md:border-[#262626] z-50 bg-[#131313]">
       <Link href={"/"}>
         <Image
           src="/logo.png"

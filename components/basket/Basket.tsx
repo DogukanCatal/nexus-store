@@ -58,7 +58,7 @@ const Basket = () => {
           )}
         </div>
       </SheetTrigger>
-      <SheetContent className="bg-[#131313]  w-full md:rounded-2xl">
+      <SheetContent className="bg-[#262626]  w-full md:rounded-2xl">
         <SheetHeader className="hidden">
           <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>

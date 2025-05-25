@@ -5,7 +5,7 @@ import React from "react";
 const CheckoutPage = () => {
   return (
     <div className="relative py-4">
-      <div className="hidden md:block fixed right-0 top-0 w-1/2  bg-[#454545] h-screen -z-10" />
+      <div className="hidden md:block fixed right-0 top-0 w-1/2  bg-[#262626] h-screen -z-10" />
 
       <div className="flex flex-col md:flex-row container mx-auto">
         <CheckoutForm />

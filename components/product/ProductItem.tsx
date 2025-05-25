@@ -12,6 +12,11 @@ const ProductItem = ({ product }: ProductItemProps) => {
   if (!product || !product.price || product.price <= 0 || !product.is_active)
     return null;
 
+  console.log(
+    product.discount_percent,
+    product.discount_price,
+    typeof product.discount_percent
+  );
   return (
     <div className="rounded-lg overflow-hidden relative flex flex-col">
       <Link
@@ -29,9 +34,11 @@ const ProductItem = ({ product }: ProductItemProps) => {
             <span className="font-bold text-xs text-white">Out Of Stock</span>
           </div>
         )}
-        {product.discount_percent && product.discount_percent > 0 && (
+        {/* {typeof product.discount_percent === "number" && */}
+        {Number(product.discount_percent) > 0 && (
           <span className="absolute bottom-0 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded rounded-b-none">
-            %{Math.round(product.discount_percent)}
+            %{Math.round(Number(product.discount_percent))}
+            <span>asdfasfa</span>
           </span>
         )}
       </Link>

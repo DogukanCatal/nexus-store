@@ -25,14 +25,14 @@ import { LoaderCircle } from "lucide-react";
 
 type VerificationDialogProps = {
   email: string;
-  showDialog: boolean;
+  showVerifyDialog: boolean;
   onVerified: () => void;
   onClose: () => void;
 };
 
 const VerificationDialog = ({
   email,
-  showDialog,
+  showVerifyDialog,
   onVerified,
   onClose,
 }: VerificationDialogProps) => {
@@ -70,9 +70,9 @@ const VerificationDialog = ({
   };
 
   return (
-    <Dialog open={showDialog} onOpenChange={onClose}>
+    <Dialog open={showVerifyDialog} onOpenChange={onClose}>
       <DialogContent
-        className="bg-[#131313]"
+        className="bg-[#131313] sm:max-w-md"
         onInteractOutside={(e) => e.preventDefault()} //do not close dialog when outside of dialog is clicked
         onEscapeKeyDown={(e) => e.preventDefault()} //do not close dialog when esc is pressed
       >
@@ -80,7 +80,8 @@ const VerificationDialog = ({
           <DialogTitle>Email Verification</DialogTitle>
           <DialogDescription className="font-semibold">
             We have sent to your email ({email}) a verification code. Please use
-            that code to verify your order.
+            that code to verify your order. (Dont Forget to check your Junk
+            mail)
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(verifyEmail)}>
