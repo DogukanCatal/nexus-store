@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <section className="py-4 min-h-screen">
-      <ProductGrid products={products} />
+      <ProductGrid initialProducts={products} />
     </section>
   );
 }

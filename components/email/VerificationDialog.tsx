@@ -72,7 +72,7 @@ const VerificationDialog = ({
   return (
     <Dialog open={showVerifyDialog} onOpenChange={onClose}>
       <DialogContent
-        className="bg-[#131313] sm:max-w-md"
+        className="bg-[#262626] sm:max-w-md"
         onInteractOutside={(e) => e.preventDefault()} //do not close dialog when outside of dialog is clicked
         onEscapeKeyDown={(e) => e.preventDefault()} //do not close dialog when esc is pressed
       >

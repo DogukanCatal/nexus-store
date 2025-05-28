@@ -244,7 +244,7 @@ const CheckoutForm = () => {
           >
             {isPlacingOrder ? (
               <span>
-                <LoaderCircle className="size-5 animate-spin" /> ...
+                <LoaderCircle className="size-5 animate-spin" />
               </span>
             ) : (
               <span>Place Order</span>

@@ -1,7 +1,7 @@
 import OrderConfirmationTemplate from "@/components/email/OrderConfirmationTemplate";
 import { verifyCaptcha } from "@/lib/recaptcha/verify-captcha";
 import { sendEmail } from "@/lib/resend/send-email";
-import { supabaseServiceClient } from "@/lib/supabase/service-client";
+import { supabaseServiceClient } from "@/lib/supabase/server";
 import { getIp } from "@/lib/upstash/get-ip";
 import { ratelimitCheckout } from "@/lib/upstash/rate-limiter";
 import {

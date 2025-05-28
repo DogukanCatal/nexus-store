@@ -38,7 +38,6 @@ const ProductItem = ({ product }: ProductItemProps) => {
         {Number(product.discount_percent) > 0 && (
           <span className="absolute bottom-0 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded rounded-b-none">
             %{Math.round(Number(product.discount_percent))}
-            <span>asdfasfa</span>
           </span>
         )}
       </Link>

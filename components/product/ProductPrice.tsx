@@ -31,14 +31,14 @@ const ProductPrice = ({
           %{Math.round(discountPercent)}
         </span>
       )} */}
-      <div className="flex items-center gap-2 w-full">
+      <div className="flex items-center gap-2 w-full flex-nowrap overflow-hidden ">
         <span
-          className={`font-bold ${sizeClasses[discountSize]} md:${sizeClasses[priceSize]}`}
+          className={`font-bold ${sizeClasses[discountSize]} md:${sizeClasses[priceSize]} whitespace-nowrap tabular-nums `}
         >
           {formatCurrency(finalPrice)}
         </span>
         <span
-          className={`font-bold ${sizeClasses[discountSize]} md:${sizeClasses[discountSize]} line-through text-gray-500`}
+          className={`font-bold ${sizeClasses[discountSize]} md:${sizeClasses[discountSize]} line-through text-gray-500 whitespace-nowrap tabular-nums`}
         >
           {formatCurrency(price)}
         </span>
