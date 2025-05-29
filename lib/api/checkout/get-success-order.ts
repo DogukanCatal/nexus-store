@@ -16,7 +16,7 @@ export const getSuccessOrder = async (
     .single();
 
   if (error) {
-    console.log("Supabase error:", error.message);
+    console.error("Supabase error:", error.message);
     return null;
   }
   return data as Order;

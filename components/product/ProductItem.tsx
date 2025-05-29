@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import ProductPrice from "./ProductPrice";
 import ProductHoverImage from "./ProductHoverImage";
-
+import { motion } from "framer-motion";
 type ProductItemProps = {
   product: Products;
 };
@@ -11,14 +11,15 @@ type ProductItemProps = {
 const ProductItem = ({ product }: ProductItemProps) => {
   if (!product || !product.price || product.price <= 0 || !product.is_active)
     return null;
-
-  console.log(
-    product.discount_percent,
-    product.discount_price,
-    typeof product.discount_percent
-  );
   return (
-    <div className="rounded-lg overflow-hidden relative flex flex-col">
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="rounded-lg overflow-hidden relative flex flex-col"
+    >
       <Link
         href={`/product/${product.slug}`}
         className="relative block aspect-square group"
@@ -55,7 +56,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
           isDiscounted={product.is_discounted}
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

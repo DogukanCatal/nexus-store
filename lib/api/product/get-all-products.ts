@@ -1,10 +1,7 @@
 import { supabase } from "../../supabase/client";
 import type { Products } from "@/types/products";
 
-export const getAllProducts = async (
-  page = 0,
-  pageSize = 24
-): Promise<Products[]> => {
+const getAllProducts = async (page = 0, pageSize = 24): Promise<Products[]> => {
   const { data, error } = await supabase
     .from("products_with_images")
     .select("*")
@@ -13,9 +10,11 @@ export const getAllProducts = async (
     .range(page * pageSize, (page + 1) * pageSize - 1);
 
   if (error) {
-    console.log("Supabase error:", error.message);
+    console.error("Supabase error:", error.message);
     return [];
   }
 
   return data as Products[];
 };
+
+export default getAllProducts;

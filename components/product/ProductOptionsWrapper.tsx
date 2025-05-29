@@ -1,12 +1,12 @@
 "use client";
-import { Product } from "@/types/product";
+import type { Product } from "@/types/product";
 import React, { useEffect, useMemo, useState } from "react";
 import ProductColorSelector from "./ProductColorSelector";
 import ProductSizeSelector from "./ProductSizeSelector";
 import { Button } from "../ui/button";
 import { useBasketStore } from "@/store/basket-store";
 import { useShallow } from "zustand/shallow";
-import { BasketProduct } from "@/types/basket-product";
+import type { BasketProduct } from "@/types/basket-product";
 import { toast } from "sonner";
 import CustomToast from "../shared/toast/CustomToast";
 

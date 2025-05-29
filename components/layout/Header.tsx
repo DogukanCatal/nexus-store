@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import SearchInput from "../search/SearchInput";
 import Basket from "../basket/Basket";
 import HomeButton from "../shared/home/HomeButton";
+import SearchSheet from "../search/SearchSheet";
 
 type HeaderProps = {
   hideIcons?: boolean;
@@ -37,7 +37,7 @@ const Header = ({ hideIcons = false }: HeaderProps) => {
           <div
             className={`flex justify-end items-center gap-4 ${hideIcons && "hidden"}`}
           >
-            <SearchInput />
+            <SearchSheet />
 
             <Basket />
           </div>

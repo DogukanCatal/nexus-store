@@ -4,6 +4,7 @@ import "../globals.css";
 import Header from "@/components/layout/Header";
 import { Toaster } from "sonner";
 import Footer from "@/components/layout/Footer";
+import ScrollToTop from "@/components/shared/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark bg-[#131313] `}
       >
         <Header />
-        <main className="mx-auto container px-4">{children}</main>
-        <Toaster style={{ zIndex: 100 }} />
+        <main className="mx-auto container px-4">
+          <ScrollToTop />
+          {children}
+        </main>
+        <Toaster style={{ zIndex: 99999 }} />
         <Footer />
       </body>
     </html>

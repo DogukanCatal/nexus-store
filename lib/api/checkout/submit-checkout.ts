@@ -19,6 +19,5 @@ export const submitCheckoutAsync = async (
       recaptchaToken: token,
     }),
   });
-  console.log(response);
   return response;
 };

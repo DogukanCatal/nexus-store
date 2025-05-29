@@ -2,7 +2,7 @@ import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import LottieWrapper from "../lottie/LottieWrapper";
 import ContinueShopping from "../button/ContinueShopping";
-
+import { motion } from "framer-motion";
 type SuccessDialogProps = {
   showSuccessDialog: boolean;
   orderRef: string;
@@ -21,7 +21,13 @@ const SuccessDialog = ({
         onInteractOutside={(e) => e.preventDefault()} //do not close dialog when outside of dialog is clicked
         onEscapeKeyDown={(e) => e.preventDefault()} //do not close dialog when esc is pressed
       >
-        <div className="flex flex-col items-center justify-center space-x-2">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="flex flex-col items-center justify-center space-x-2"
+        >
           <div className="h-[200px] w-[200px] flex items-center justify-center">
             <LottieWrapper
               path="/animations/lottie_success.json"
@@ -45,7 +51,7 @@ const SuccessDialog = ({
           <div className="mt-4">
             <ContinueShopping onClose={onClose} />
           </div>
-        </div>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );
