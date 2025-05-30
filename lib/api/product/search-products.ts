@@ -13,19 +13,16 @@ const searchProducts = async (
     .from("products_with_images")
     .select("*")
     .eq("is_active", true)
-    .ilike("name", `%${query}%`)
-    .order("name", { ascending: true });
+    .ilike("name", `%${query}%`);
 
   if (!fetchAll) {
-    queryBuilder = queryBuilder.limit(10);
+    queryBuilder = queryBuilder.order("name", { ascending: true }).limit(10);
   } else {
     queryBuilder = queryBuilder.range(
       page * pageSize,
       (page + 1) * pageSize - 1
     );
   }
-
-  console.log({ fetchAll, page, pageSize, query });
 
   const { data, error } = await queryBuilder;
 

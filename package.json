@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-accordion": "^1.2.10",
     "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.2",
     "@react-email/components": "^0.0.41",
     "@supabase/supabase-js": "^2.49.4",

@@ -38,7 +38,6 @@ export async function POST(req: Request) {
       { status: 429 }
     );
   }
-  console.log(recaptchaToken);
   const isHuman = await verifyCaptcha(recaptchaToken);
   if (!isHuman) {
     return NextResponse.json(
@@ -77,7 +76,7 @@ export async function POST(req: Request) {
         data
       );
     } catch (err) {
-      console.log("Email send error: ", err);
+      console.error("Email send error: ", err);
     }
     return NextResponse.json(
       { success: true, data: data.order_ref },

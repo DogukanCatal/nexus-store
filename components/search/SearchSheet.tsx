@@ -15,19 +15,17 @@ import { Products } from "@/types/products";
 import { Skeleton } from "../ui/skeleton";
 import SearchResult from "./SearchResult";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import SearchInput from "./SearchInput";
+import { useSearchInput } from "@/hooks/useSearchInput";
 
 const SearchSheet = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const sheetSide = isMobile ? "top" : "right";
   const roundSide = isMobile ? "rounded-b-2xl" : "rounded-l-2xl";
-  const [query, setQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<Products[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const router = useRouter();
-
+  const { query, setQuery, handleSearch } = useSearchInput();
   useEffect(() => {
     const delay = setTimeout(async () => {
       if (query.trim()) {
@@ -43,10 +41,9 @@ const SearchSheet = () => {
     return () => clearTimeout(delay);
   }, [query]);
 
-  const handleSearch = () => {
-    const trimmed = query.trim();
-    if (trimmed.length > 0) {
-      router.push(`/search/${trimmed}`);
+  const handleSearchWrapper = () => {
+    if (query.trim().length > 0) {
+      handleSearch();
       setOpen(false);
     }
   };
@@ -69,8 +66,8 @@ const SearchSheet = () => {
             <SearchInput
               query={query}
               setQuery={setQuery}
-              onEnter={handleSearch}
-              onSearchClick={handleSearch}
+              onEnter={handleSearchWrapper}
+              onSearchClick={handleSearchWrapper}
             />
             {isLoading && (
               <div className="flex w-full flex-col ">

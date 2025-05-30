@@ -34,7 +34,6 @@ const CheckoutProducts = () => {
     product: BasketItem,
     removeCompletely?: boolean
   ) => {
-    console.log(removeCompletely);
     removeItem(
       product.product.product_id,
       product.product.color_id,

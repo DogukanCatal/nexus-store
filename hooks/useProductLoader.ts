@@ -2,12 +2,14 @@
 import getAllProducts from "@/lib/api/product/get-all-products";
 import searchProducts from "@/lib/api/product/search-products";
 import { Products } from "@/types/products";
+import { SortOption } from "@/types/sort";
 import { useCallback, useState } from "react";
 
 type useProductLoaderOptions = {
   initialProducts: Products[];
   query?: string;
   search?: boolean;
+  sortBy?: SortOption;
 };
 
 export const useProductLoader = ({
