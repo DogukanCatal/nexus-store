@@ -10,13 +10,13 @@ import {
 } from "../ui/sheet";
 import { Search } from "lucide-react";
 import useMediaQuery from "@/lib/use-media-query";
-import searchProducts from "@/lib/api//product/search-products";
 import { Products } from "@/types/products";
 import { Skeleton } from "../ui/skeleton";
 import SearchResult from "./SearchResult";
 import Link from "next/link";
 import SearchInput from "./SearchInput";
 import { useSearchInput } from "@/hooks/useSearchInput";
+import searchProductsClient from "@/lib/api/product/search-products";
 
 const SearchSheet = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -27,15 +27,15 @@ const SearchSheet = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { query, setQuery, handleSearch } = useSearchInput();
   useEffect(() => {
+    setIsLoading(true);
     const delay = setTimeout(async () => {
       if (query.trim()) {
-        setIsLoading(true);
-        const products = await searchProducts(query);
+        const products = await searchProductsClient(query);
         setSearchResults(products);
-        setIsLoading(false);
       } else {
         setSearchResults([]);
       }
+      setIsLoading(false);
     }, 300);
 
     return () => clearTimeout(delay);

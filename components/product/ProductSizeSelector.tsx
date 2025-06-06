@@ -33,9 +33,12 @@ const ProductSizeSelector = ({
                 !hasStock
                   ? "bg-white/50 cursor-not-allowed"
                   : "hover:cursor-pointer"
-              }`}
+              } relative overflow-hidden`}
             >
               {size.size.label}
+              {!hasStock && (
+                <div className="absolute bg-white h-0.5 top-1/2 left-0 w-full rotate-45" />
+              )}
             </button>
           </div>
         );

@@ -1,4 +1,4 @@
-import ProductCarousel from "@/components/product/ProductCarousel";
+import ProductCarouselWrapper from "@/components/product/ProductCarouselWrapper";
 import ProductDescription from "@/components/product/ProductDescription";
 import ProductOptionsWrapper from "@/components/product/ProductOptionsWrapper";
 import ProductPrice from "@/components/product/ProductPrice";
@@ -82,7 +82,7 @@ const ProductDetailPage = async (props: { params: ParamsType }) => {
           </div>
         </noscript>
         {/* Actual Carousel */}
-        {orderedImages && <ProductCarousel images={orderedImages} />}
+        {orderedImages && <ProductCarouselWrapper images={orderedImages} />}
       </div>
 
       <div className="flex flex-col gap-6">

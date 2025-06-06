@@ -96,7 +96,7 @@ const CheckoutForm = () => {
       }
       setIsPlacingOrder(false);
     } catch (err) {
-      console.log("Unexpected error: ", err);
+      console.error("Unexpected error: ", err);
       alert("Something went wrong.");
       setIsPlacingOrder(false);
     }

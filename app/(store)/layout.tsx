@@ -4,7 +4,7 @@ import "../globals.css";
 import Header from "@/components/layout/Header";
 import { Toaster } from "sonner";
 import Footer from "@/components/layout/Footer";
-import ScrollToTop from "@/components/shared/ScrollToTop";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,13 +31,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark bg-[#131313] `}
       >
-        <Header />
-        <main className="mx-auto container px-4">
-          <ScrollToTop />
-          {children}
-        </main>
-        <Toaster style={{ zIndex: 99999 }} />
-        <Footer />
+        <NuqsAdapter>
+          <Header />
+          <main className="mx-auto container px-4">{children}</main>
+          <Toaster style={{ zIndex: 99999 }} />
+          <Footer />
+        </NuqsAdapter>
       </body>
     </html>
   );

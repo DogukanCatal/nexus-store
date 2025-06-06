@@ -32,7 +32,6 @@ export const POST = async (req: Request) => {
     return NextResponse.json({ error: "Code Expired" }, { status: 400 });
   }
   if (storedCode !== code) {
-    console.log("typeof", typeof storedCode, storedCode, code);
     return NextResponse.json({ error: "Incorrect Code" }, { status: 400 });
   }
 

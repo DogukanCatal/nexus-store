@@ -1,19 +1,30 @@
-import ProductGrid from "@/components/product/ProductGrid";
-import getAllProducts from "@/lib/api/product/get-all-products";
+import ProductsGridLoader from "@/components/shared/loading/ProductsGridLoader";
+import ProductsGridServerWrapper from "@/components/shared/server/ProductsGridServerWrapper";
+import Sort from "@/components/shared/sort/Sort";
+import { loadSearchParams } from "@/lib/nuqs/searchParams";
+import { revalidateTag } from "next/cache";
+import { SearchParams } from "nuqs";
+import { Suspense } from "react";
 
-export default async function Home() {
-  const products = await getAllProducts();
-  if (!products || products.length === 0) {
-    return (
-      <p className="text-center min-h-screen text-gray-500 mt-8">
-        Urun bulunamadi.
-      </p>
-    );
+type HomePageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+export default async function Home({ searchParams }: HomePageProps) {
+  const { sort } = await loadSearchParams(searchParams);
+  const suspenseKey = `sort=${sort}`;
+
+  async function refetchProducts() {
+    "use server";
+    revalidateTag("products");
   }
 
   return (
-    <section className="py-4 min-h-screen">
-      <ProductGrid initialProducts={products} />
+    <section className="py-4 min-h-screen space-y-6">
+      <Sort refetchProducts={refetchProducts} />
+      <Suspense key={suspenseKey} fallback={<ProductsGridLoader />}>
+        <ProductsGridServerWrapper sort={sort} />
+      </Suspense>
     </section>
   );
 }

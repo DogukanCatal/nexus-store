@@ -1,40 +1,50 @@
+"use client";
 import React from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
-import { SortLabels } from "@/lib/sort-labels";
 import { SortOption } from "@/types/sort";
-const Sort = ({
-  value,
-  onChange,
-}: {
-  value: SortOption;
-  onChange: (value: SortOption) => void;
-}) => {
-  console.log(value);
-  console.log("SelectItem values:", Object.keys(SortLabels));
+import { SortLabels } from "@/lib/sort-labels";
+import { useProductParams } from "@/hooks/useProductParams";
+
+type SortProps = {
+  refetchProducts?: () => Promise<void>;
+  search?: boolean;
+};
+
+const Sort = ({ refetchProducts, search = false }: SortProps) => {
+  const { sortBy, setSortBy } = useProductParams();
+
+  const handleSort = (val: SortOption) => {
+    setSortBy(val);
+    if (!search) {
+      refetchProducts?.();
+    }
+  };
+
   return (
-    <Select
-      value={value}
-      onValueChange={(val) => {
-        onChange(val as SortOption);
-      }}
-    >
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Sort by" />
-      </SelectTrigger>
-      <SelectContent>
-        {Object.entries(SortLabels).map(([key, label]) => (
-          <SelectItem key={key} value={key}>
-            {label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className=" flex items-center justify-start w-full">
+      <Select
+        value={sortBy}
+        onValueChange={(val) => handleSort(val as SortOption)}
+      >
+        <SelectTrigger className="w-[180px]">
+          <span className="text-sm text-muted-foreground">
+            {SortLabels[sortBy as SortOption] ?? "Sort by"}
+          </span>
+        </SelectTrigger>
+        <SelectContent>
+          {Object.values(SortOption).map((sortValue) => (
+            <SelectItem key={sortValue} value={sortValue}>
+              {SortLabels[sortValue]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

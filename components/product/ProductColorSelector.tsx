@@ -39,8 +39,14 @@ const ProductColorSelector = ({
               } ${
                 // todo stockda yoksa rengi ayarla
                 !hasStock ? " cursor-not-allowed" : "cursor-pointer"
-              }`}
-            ></button>
+              }relative`}
+            >
+              {!hasStock && (
+                <div
+                  className={`absolute top-1/2 left-0 h-0.5 w-full rotate-45 ${isWhite ? "bg-black" : "bg-white"}`}
+                />
+              )}
+            </button>
           </div>
         );
       })}

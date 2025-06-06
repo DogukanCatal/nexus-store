@@ -10,17 +10,20 @@ type ProductGridProps = {
   initialProducts: Products[];
   query?: string;
   search?: boolean;
+  sort?: string;
 };
 
 const ProductGrid = ({
   initialProducts,
   query = "",
   search = false,
+  sort = "",
 }: ProductGridProps) => {
   const { loadMore, isLoading, hasMore, products } = useProductLoader({
     initialProducts,
     query,
     search,
+    sort,
   });
 
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -55,7 +58,7 @@ const ProductGrid = ({
   }, [loadMore, hasMore, isLoading]);
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         <AnimatePresence>
           {products.map((product) => (

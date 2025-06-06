@@ -1,40 +1,33 @@
-import ProductGrid from "@/components/product/ProductGrid";
 import SearchPageInput from "@/components/search/SearchPageInput";
-import searchProducts from "@/lib/api/product/search-products";
-import React from "react";
+import ProductsGridLoader from "@/components/shared/loading/ProductsGridLoader";
+import ProductsGridServerWrapper from "@/components/shared/server/ProductsGridServerWrapper";
+import Sort from "@/components/shared/sort/Sort";
+import { loadSearchParams } from "@/lib/nuqs/searchParams";
+import { SearchParams } from "nuqs";
+import React, { Suspense } from "react";
 
 const SearchPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ query: string }>;
+  searchParams: Promise<SearchParams>;
 }) => {
   const { query } = await params;
-  const products = await searchProducts(query, true);
-  if (!products || products.length === 0) {
-    return (
-      <section className="py-4 min-h-screen flex flex-col items-center justify-center gap-6">
-        <div className="mt-10 gap-6">
-          <h1 className="text-4xl font-semibold">
-            Results for &quot;{query}&quot;
-          </h1>
-        </div>
-        <SearchPageInput />
-        <p className="text-center min-h-screen text-gray-500 mt-8">
-          Urun bulunamadi.
-        </p>
-      </section>
-    );
-  }
+  const { sort } = await loadSearchParams(searchParams);
 
   return (
-    <section className="py-4 min-h-screen flex flex-col items-center justify-center gap-6">
-      <div className="mt-5 gap-6">
+    <section className="py-4 min-h-screen flex flex-col items-center justify-start space-y-4">
+      <div className="mt-5">
         <h1 className="text-4xl font-semibold">
           Results for &quot;{query}&quot;
         </h1>
       </div>
       <SearchPageInput />
-      <ProductGrid initialProducts={products} query={query} search={true} />
+      <Sort search={true} />
+      <Suspense key={query + sort} fallback={<ProductsGridLoader />}>
+        <ProductsGridServerWrapper query={query} sort={sort} search={true} />
+      </Suspense>
     </section>
   );
 };
