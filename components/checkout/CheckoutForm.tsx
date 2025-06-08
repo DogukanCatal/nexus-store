@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "../ui/input";
-import { CheckoutFormData, checkoutSchema } from "@/schemas/checkout-schema";
+import {
+  CheckoutFormData,
+  checkoutSchema,
+} from "@/schemas/checkout/checkout-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";

@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { Products } from "@/types/products";
 import { SortOption } from "@/types/sort";
 
@@ -10,7 +10,7 @@ const searchProducts = async (
   pageSize = 24
 ): Promise<Products[]> => {
   if (!query) return [];
-  let queryBuilder = supabase
+  let queryBuilder = createClient()
     .from("products_with_images")
     .select("*")
     .eq("is_active", true)

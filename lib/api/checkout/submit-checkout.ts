@@ -1,4 +1,4 @@
-import { CheckoutFormData } from "@/schemas/checkout-schema";
+import { CheckoutFormData } from "@/schemas/checkout/checkout-schema";
 import { fetchApi } from "../fect-api";
 import { BasketItem } from "@/store/basket-store";
 import type { ApiResponse } from "@/types/api/base";

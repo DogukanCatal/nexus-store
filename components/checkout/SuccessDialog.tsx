@@ -1,8 +1,8 @@
 import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import LottieWrapper from "../lottie/LottieWrapper";
-import ContinueShopping from "../button/ContinueShopping";
 import { motion } from "framer-motion";
+import ContinueShopping from "../shared/button/ContinueShopping";
 type SuccessDialogProps = {
   showSuccessDialog: boolean;
   orderRef: string;

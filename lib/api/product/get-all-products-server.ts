@@ -1,12 +1,12 @@
 import { SortOption } from "@/types/sort";
-import { supabase } from "../../supabase/client";
+import { createClient } from "../../supabase/client";
 import type { Products } from "@/types/products";
 import { unstable_cache } from "next/cache";
 
 const getAllProductsServer = unstable_cache(
   async (sort?: string, page = 0, pageSize = 24): Promise<Products[]> => {
     console.log("CACHE DENIYORUMMMMMMMMMMMMMMM");
-    let queryBuilder = supabase
+    let queryBuilder = createClient()
       .from("products_with_images")
       .select("*")
       .eq("is_active", true);

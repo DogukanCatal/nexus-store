@@ -1,10 +1,10 @@
 import { Product } from "@/types/product";
-import { supabase } from "../../supabase/client";
+import { createClient } from "../../supabase/client";
 
 export const getProductDetailBySlug = async (
   slug: string
 ): Promise<Product | null> => {
-  const { data: product, error } = await supabase
+  const { data: product, error } = await createClient()
     .from("products")
     .select(
       `*,

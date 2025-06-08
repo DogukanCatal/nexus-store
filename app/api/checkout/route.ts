@@ -1,13 +1,13 @@
 import OrderConfirmationTemplate from "@/components/email/OrderConfirmationTemplate";
 import { verifyCaptcha } from "@/lib/recaptcha/verify-captcha";
 import { sendEmail } from "@/lib/resend/send-email";
-import { supabaseServiceClient } from "@/lib/supabase/server";
+import { supabaseServiceClient } from "@/lib/supabase/service";
 import { getIp } from "@/lib/upstash/get-ip";
 import { ratelimitCheckout } from "@/lib/upstash/rate-limiter";
 import {
   CheckoutPayload,
   checkoutPayloadSchema,
-} from "@/schemas/checkout-payload-schema";
+} from "@/schemas/checkout/checkout-payload-schema";
 import type { OrderConfirmationProps } from "@/types/emails/order-confirmation";
 import { PostgrestError } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";

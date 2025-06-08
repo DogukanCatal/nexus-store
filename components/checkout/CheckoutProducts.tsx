@@ -5,7 +5,7 @@ import { useShallow } from "zustand/shallow";
 import BasketProduct from "../basket/BasketProduct";
 import { getBasketProductFromBasketItem } from "@/lib/utils/basket-utils";
 import { formatCurrency } from "@/lib/utils/price-utils";
-import useMediaQuery from "@/lib/use-media-query";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import {
   Accordion,
   AccordionContent,

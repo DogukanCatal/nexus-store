@@ -1,10 +1,10 @@
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { Order } from "@/types/api/order";
 
 export const getSuccessOrder = async (
   orderRef: string
 ): Promise<Order | null> => {
-  const { data, error } = await supabase
+  const { data, error } = await createClient()
     .from("orders")
     .select(
       `*,

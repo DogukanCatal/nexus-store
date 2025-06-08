@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Search } from "lucide-react";
-import useMediaQuery from "@/lib/use-media-query";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { Products } from "@/types/products";
 import { Skeleton } from "../ui/skeleton";
 import SearchResult from "./SearchResult";

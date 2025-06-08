@@ -39,7 +39,7 @@ const ProductColorSelector = ({
               } ${
                 // todo stockda yoksa rengi ayarla
                 !hasStock ? " cursor-not-allowed" : "cursor-pointer"
-              }relative`}
+              } relative`}
             >
               {!hasStock && (
                 <div

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Basket from "../basket/Basket";
-import HomeButton from "../shared/home/HomeButton";
+import HomeButton from "../shared/button/HomeButton";
 import SearchSheet from "../search/SearchSheet";
 
 type HeaderProps = {
@@ -19,7 +19,7 @@ const Header = ({ hideIcons = false }: HeaderProps) => {
         </div>
 
         {/* Logo */}
-        <div className="w-1/3 flex justify-center">
+        <div className="w-1/3 flex justify-center relative">
           <Link href="/" className="flex items-center">
             <Image
               src="/logo.png"
