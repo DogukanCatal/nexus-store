@@ -69,7 +69,12 @@ const MultiImageUploader = () => {
           ))}
         </div>
       </div>
-      <Button type="button" onClick={() => inputRef.current?.click()}>
+      <Button
+        type="button"
+        variant="outline"
+        className="text-sm font-semibold cursor-pointer"
+        onClick={() => inputRef.current?.click()}
+      >
         Add Picture
       </Button>
     </div>

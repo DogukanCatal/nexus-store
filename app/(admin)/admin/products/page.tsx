@@ -1,4 +1,5 @@
 import AdminProductItem from "@/components/admin/AdminProductItem";
+import { Button } from "@/components/ui/button";
 import { getAllProductsAdmin } from "@/lib/api/admin/products/get-all-products";
 import { AdminProduct } from "@/types/admin-product";
 import Link from "next/link";
@@ -13,6 +14,11 @@ const AdminProductsPage = async () => {
 
   return (
     <div className="w-full flex-col flex items-center justify-center space-y-6 ">
+      <Link href={"/admin/products/create"}>
+        <Button className="font-semibold cursor-pointer float-right">
+          Create
+        </Button>
+      </Link>
       {products.map((product) => (
         <Link
           href={`/admin/products/edit/${product.slug}`}

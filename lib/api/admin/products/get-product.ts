@@ -12,10 +12,12 @@ export const getProduct = async (
       `*,
         product_colors(
         id,
-        colors(*)
+        product_id,
+        color:color_id(*)
         ),
         product_sizes(id,
-        sizes(*)
+        product_id,
+        size:size_id(*)
         ),
         product_images(*),
         product_stock(*)`
