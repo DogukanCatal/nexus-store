@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import MultiImageUploader from "./MultiImageUploader";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -35,7 +35,6 @@ const ProductForm = ({
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -136,13 +135,21 @@ const ProductForm = ({
           Product Name
         </Label>
 
-        <Input
-          {...register("name")}
-          placeholder="Product Name"
-          type="text"
-          className={`font-semibold text-xs md:text-sm py-4 md:py-6`}
-          defaultValue={isEdit ? product.name : ""}
-        />
+        <div className="flex flex-col flex-1">
+          <Input
+            {...register("name")}
+            placeholder="Product Name"
+            type="text"
+            className={` font-semibold text-xs md:text-sm py-4 md:py-6 ${
+              errors.name ? "border-[#EA4A78]" : ""
+            }`}
+          />
+          {errors.name && (
+            <span className="text-[#EA4A78] font-semibold text-xs md:tex-sm">
+              {errors.name.message}
+            </span>
+          )}
+        </div>
       </div>
       <div className="grid w-full gap-3">
         <Label className="font-semibold">Images</Label>
