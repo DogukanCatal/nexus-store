@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MultiImageUploader from "./MultiImageUploader";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -11,6 +11,14 @@ import { useGroupedStockByColor } from "@/hooks/use-grouped-stock-by-color";
 import { GroupedStockByColor } from "@/types/grouped-stock-by-color";
 import Variants from "./Variants";
 import { Button } from "../ui/button";
+import { ProductImage } from "@/types/product-image";
+import {
+  ProductFormData,
+  productFormSchema,
+} from "@/schemas/admin/product/product-form-schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createClient } from "@/lib/supabase/client";
 
 type ProductFormProps = {
   product: AdminProduct | null;
@@ -23,25 +31,113 @@ const ProductForm = ({
   initialColors,
   initialSizes,
 }: ProductFormProps) => {
-  console.log(product);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productFormSchema),
+    defaultValues: {
+      name: product?.name ?? "",
+      description: product?.description ?? "",
+      price: product?.price ?? 0,
+      discount_percent: product?.discount_percent ?? 0,
+      // images: [],
+      variants: useGroupedStockByColor(product),
+    },
+  });
+
   const [variants, setVariants] = useState<GroupedStockByColor[]>(
     useGroupedStockByColor(product)
   );
+  const [newFiles, setNewFiles] = useState<File[]>([]);
+  const [deletedImages, setDeletedImages] = useState<ProductImage[]>([]);
   const isEdit = !!product;
-  console.log(initialSizes, "ilk sizes");
   const handleVariantDelete = (id: string) => {
-    console.log("hereeeee");
-    setVariants(variants.filter((variant) => variant.id !== id));
+    const updated = variants.filter((variant) => variant.id !== id);
+    setVariants(updated);
+    setValue("variants", updated, { shouldValidate: true }); // <--- Zod form datasını da güncelle
+  };
+  const onSubmit = async (data: ProductFormData) => {
+    console.log("submit basladi");
+    console.log(variants);
+    try {
+      const supabase = createClient();
+      // Step 1: Upload new files
+      const uploadedImageUrls: { url: string; display_order: number }[] = [];
+      for (let i = 0; i < newFiles.length; i++) {
+        const file = newFiles[i];
+        const filePath = `${Date.now()}-${file.name}`;
+        const { error } = await supabase.storage
+          .from("product-images")
+          .upload(filePath, file);
+        if (error) throw new Error(`Failed to upload image: ${file.name}`);
+
+        const publicUrl = supabase.storage
+          .from("product-images")
+          .getPublicUrl(filePath).data.publicUrl;
+
+        uploadedImageUrls.push({ url: publicUrl, display_order: i });
+      }
+
+      // Step 2: Remove deleted images from storage
+      for (const img of deletedImages) {
+        const path = img.url.split("/product-images//")[1];
+
+        if (path) {
+          console.log(path);
+          const { error } = await supabase.storage
+            .from("product-images")
+            .remove([path]);
+          if (error) {
+            console.log(error);
+          }
+        }
+      }
+
+      // Step 3: Prepare final image array
+      const allImages = [
+        ...(product?.product_images || [])
+          .filter((img) => !deletedImages.some((d) => d.url === img.url))
+          .map((img, index) => ({
+            url: img.url,
+            display_order: index,
+          })),
+        ...uploadedImageUrls,
+      ];
+
+      // Step 4: Replace the images in data and call RPC
+      const finalData = {
+        ...data,
+        ...(product?.id ? { id: product.id } : {}),
+        images: allImages,
+      };
+
+      // TODO: Call your Supabase RPC function here
+      console.log("Final Payload to RPC:", finalData);
+
+      const { error } = await supabase.rpc("create_or_update_product", {
+        product_input: finalData,
+      });
+      if (error) {
+        console.error("RPC error:", error.message);
+      }
+    } catch (err) {
+      console.error("Error during form submit:", err);
+    }
   };
 
   return (
-    <form className="grid w-full gap-4">
+    <form className="grid w-full gap-4" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid w-full gap-3">
         <Label htmlFor="name" className="font-semibold">
           Product Name
         </Label>
 
         <Input
+          {...register("name")}
           placeholder="Product Name"
           type="text"
           className={`font-semibold text-xs md:text-sm py-4 md:py-6`}
@@ -50,7 +146,14 @@ const ProductForm = ({
       </div>
       <div className="grid w-full gap-3">
         <Label className="font-semibold">Images</Label>
-        <MultiImageUploader />
+        <MultiImageUploader
+          initialImages={product?.product_images ?? []}
+          onChange={(added, removed) => {
+            setNewFiles(added);
+            setDeletedImages(removed);
+            // setValue("images", added, { shouldValidate: true });
+          }}
+        />
       </div>
 
       {/* <div className="grid w-full gap-3">
@@ -69,6 +172,7 @@ const ProductForm = ({
         </Label>
 
         <Textarea
+          {...register("description")}
           placeholder="Enter your description here"
           className={`font-semibold text-xs md:text-sm h-[100px]`}
           defaultValue={isEdit ? product.description : ""}
@@ -81,6 +185,7 @@ const ProductForm = ({
           </Label>
 
           <Input
+            {...register("price")}
             placeholder="Price"
             type="text"
             className={`font-semibold text-xs md:text-sm py-4 md:py-6`}
@@ -93,6 +198,7 @@ const ProductForm = ({
           </Label>
 
           <Input
+            {...register("discount_percent")}
             placeholder="%"
             type="text"
             className={`font-semibold text-xs md:text-sm py-4 md:py-6`}
@@ -108,14 +214,17 @@ const ProductForm = ({
         initialSizes={initialSizes}
         onSaveOrEdit={(updatedVariant: GroupedStockByColor) => {
           setVariants((prev) => {
-            const existingVariant = prev.some(
-              (v) => v.id === updatedVariant.id
-            );
-            return existingVariant
+            const updated = prev.some((v) => v.id === updatedVariant.id)
               ? prev.map((v) =>
                   v.id === updatedVariant.id ? updatedVariant : v
                 )
               : [...prev, updatedVariant];
+
+            // JSON formatına dönüştür
+            const formatted = updated;
+
+            setValue("variants", formatted, { shouldValidate: true });
+            return updated;
           });
         }}
       />

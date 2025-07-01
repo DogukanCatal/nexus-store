@@ -4,20 +4,33 @@ import React, { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { ProductImage } from "@/types/product-image";
 
-const MultiImageUploader = () => {
+type MultiImageUploaderProps = {
+  initialImages: ProductImage[];
+  onChange: (added: File[], removed: ProductImage[]) => void;
+};
+
+const MultiImageUploader = ({
+  initialImages,
+  onChange,
+}: MultiImageUploaderProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const [files, setFiles] = useState<File[]>([]);
-
+  const [existingImages, setExistingImages] = useState<ProductImage[]>(
+    initialImages || []
+  );
+  const [deletedImages, setDeletedImages] = useState<ProductImage[]>([]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || []);
-    // setPreviews(files.map((file) => URL.createObjectURL(file)));
     const uniqueFiles = newFiles.filter(
       (file) => !files.some((f) => f.name === file.name)
     );
 
-    setFiles((prev) => [...prev, ...uniqueFiles]);
+    const updatedFiles = [...files, ...uniqueFiles];
+    setFiles(updatedFiles);
+
+    onChange?.(updatedFiles, deletedImages);
   };
 
   useEffect(() => {
@@ -27,7 +40,18 @@ const MultiImageUploader = () => {
   }, [files]);
 
   const handleDeleteFile = (fileToDelete: File) => {
-    setFiles((prev) => prev.filter((file) => file !== fileToDelete));
+    const updatedFiles = files.filter((file) => file !== fileToDelete);
+    setFiles(updatedFiles);
+
+    onChange?.(updatedFiles, deletedImages);
+  };
+  const handleDeleteExistingImage = (image: ProductImage) => {
+    const updatedImages = existingImages.filter((img) => img.id !== image.id);
+    setExistingImages(updatedImages);
+    const updatedDeleted = [...deletedImages, image];
+    setDeletedImages(updatedDeleted);
+
+    onChange?.(files, updatedDeleted);
   };
 
   console.log(files);
@@ -45,14 +69,36 @@ const MultiImageUploader = () => {
 
       <div className=" w-full">
         <div className="flex flex-wrap justify-center gap-2 w-full overflow-y-auto">
+          {existingImages.map((image, i) => (
+            <div
+              key={`existing-${image.id}`}
+              className="relative aspect-square h-[100px] w-[100px] border-2 rounded-lg overflow-hidden"
+            >
+              <Image
+                src={image.url}
+                alt={`Existing image ${i + 1}`}
+                fill
+                className="object-cover"
+              />
+              <Button
+                type="button"
+                variant="link"
+                className="absolute top-0 right-0 cursor-pointer"
+                onClick={() => handleDeleteExistingImage(image)}
+              >
+                <X />
+              </Button>
+            </div>
+          ))}
+
           {files.map((file, i) => (
             <div
-              key={i}
-              className="relative  aspect-square h-[100px] w-[100px] border-2 rounded-lg overflow-hidden "
+              key={`file-${i}`}
+              className="relative aspect-square h-[100px] w-[100px] border-2 rounded-lg overflow-hidden"
             >
               <Image
                 src={URL.createObjectURL(file)}
-                alt={`Preview image ${i + 1}`}
+                alt={`New image ${i + 1}`}
                 fill
                 className="object-cover"
                 priority={i === 0}

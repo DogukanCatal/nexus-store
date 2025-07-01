@@ -21,6 +21,7 @@ export const getAllProductsAdmin = async (): Promise<AdminProduct[]> => {
 
   if (error) {
     console.error("Error while fetching products: ", error.message);
+    return [];
   }
 
   return (data as AdminProduct[]) || [];
