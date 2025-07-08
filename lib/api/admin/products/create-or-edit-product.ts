@@ -19,12 +19,9 @@ export const submitProductAsync = async (
     const file = newFiles[i];
 
     const filePath = `${Date.now()}-${file.name}`;
-    const safeFileName = file.name
-      .replace(/\s/g, "-")
-      .replace(/[^a-zA-Z0-9.-]/g, "");
     const { error } = await supabase.storage
       .from("product-images")
-      .upload(`products/${safeFileName}`, file);
+      .upload(filePath, file);
     if (error) {
       return { success: false, error: "Error uploading photo" };
     }
