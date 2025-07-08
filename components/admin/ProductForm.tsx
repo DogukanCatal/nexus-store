@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { submitProductAsync } from "@/lib/api/admin/products/create-or-edit-product";
 import { LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type ProductFormProps = {
   product: AdminProduct | null;
@@ -55,16 +56,15 @@ const ProductForm = ({
   const [newFiles, setNewFiles] = useState<File[]>([]);
   const [deletedImages, setDeletedImages] = useState<ProductImage[]>([]);
   const isEdit = !!product;
-  console.log(product);
   const handleVariantDelete = (id: string) => {
     const updated = variants.filter((variant) => variant.id !== id);
     setVariants(updated);
     setValue("variants", updated, { shouldValidate: true }); // <--- Zod form datasını da güncelle
   };
+  const router = useRouter();
   const onSubmit = (data: ProductFormData) => {
     startTransition(async () => {
       try {
-        console.log(newFiles);
         const response = await submitProductAsync(
           data,
           newFiles,
@@ -73,10 +73,13 @@ const ProductForm = ({
         );
         if (!response.success) {
           console.error("Checkout error:", response.error);
+          return;
         }
       } catch (err) {
         console.error("Error during form submit:", err);
+        return;
       }
+      router.replace("/admin/products");
     });
   };
 
