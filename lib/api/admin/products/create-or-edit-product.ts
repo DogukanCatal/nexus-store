@@ -11,20 +11,20 @@ export const submitProductAsync = async (
   deletedImages: ProductImage[],
   product: AdminProduct | null
 ): Promise<ApiResponse<boolean>> => {
-  console.log("hereeeeeee", newFiles);
   const supabase = createClient();
 
   // Step 1: Upload new files
   const uploadedImageUrls: { url: string; display_order: number }[] = [];
-  console.log("filessss", newFiles);
   for (let i = 0; i < newFiles.length; i++) {
     const file = newFiles[i];
 
-    console.log("fileeeee", file);
     const filePath = `${Date.now()}-${file.name}`;
+    const safeFileName = file.name
+      .replace(/\s/g, "-")
+      .replace(/[^a-zA-Z0-9.-]/g, "");
     const { error } = await supabase.storage
       .from("product-images")
-      .upload(filePath, file);
+      .upload(`products/${safeFileName}`, file);
     if (error) {
       return { success: false, error: "Error uploading photo" };
     }
