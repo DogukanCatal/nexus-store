@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import React from "react";
 import "../globals.css";
 import MinimalHeader from "@/components/layout/MinimalHeader";
+import { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,6 +13,16 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const metadata: Metadata = {
+  title: "Nexus",
+  description: "Nexus Store",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+};
 
 const layout = ({
   children,
