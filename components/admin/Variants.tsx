@@ -27,7 +27,7 @@ const Variants = ({
 }: VariantsProps) => {
   const [showVariantDialog, setShowVariantDialog] = useState<boolean>(false);
   const [selectedVariant, setSelectedVariant] = useState<GroupedStockByColor>();
-  const handleAddVarient = () => {
+  const handleAddVariant = () => {
     console.log(initialSizes);
     if (initialSizes) {
       const emptyVariant: GroupedStockByColor = {
@@ -65,7 +65,7 @@ const Variants = ({
         type="button"
         className="font-semibold cursor-pointer"
         variant="outline"
-        onClick={handleAddVarient}
+        onClick={handleAddVariant}
       >
         Add Variant
       </Button>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import MultiImageUploader from "./MultiImageUploader";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -18,7 +18,8 @@ import {
 } from "@/schemas/admin/product/product-form-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@/lib/supabase/client";
+import { submitProductAsync } from "@/lib/api/admin/products/create-or-edit-product";
+import { LoaderCircle } from "lucide-react";
 
 type ProductFormProps = {
   product: AdminProduct | null;
@@ -47,85 +48,36 @@ const ProductForm = ({
       variants: useGroupedStockByColor(product),
     },
   });
-
+  const [isPending, startTransition] = useTransition();
   const [variants, setVariants] = useState<GroupedStockByColor[]>(
     useGroupedStockByColor(product)
   );
   const [newFiles, setNewFiles] = useState<File[]>([]);
   const [deletedImages, setDeletedImages] = useState<ProductImage[]>([]);
   const isEdit = !!product;
+  console.log(product);
   const handleVariantDelete = (id: string) => {
     const updated = variants.filter((variant) => variant.id !== id);
     setVariants(updated);
     setValue("variants", updated, { shouldValidate: true }); // <--- Zod form datasını da güncelle
   };
-  const onSubmit = async (data: ProductFormData) => {
-    console.log("submit basladi");
-    console.log(variants);
-    try {
-      const supabase = createClient();
-      // Step 1: Upload new files
-      const uploadedImageUrls: { url: string; display_order: number }[] = [];
-      for (let i = 0; i < newFiles.length; i++) {
-        const file = newFiles[i];
-        const filePath = `${Date.now()}-${file.name}`;
-        const { error } = await supabase.storage
-          .from("product-images")
-          .upload(filePath, file);
-        if (error) throw new Error(`Failed to upload image: ${file.name}`);
-
-        const publicUrl = supabase.storage
-          .from("product-images")
-          .getPublicUrl(filePath).data.publicUrl;
-
-        uploadedImageUrls.push({ url: publicUrl, display_order: i });
-      }
-
-      // Step 2: Remove deleted images from storage
-      for (const img of deletedImages) {
-        const path = img.url.split("/product-images//")[1];
-
-        if (path) {
-          console.log(path);
-          const { error } = await supabase.storage
-            .from("product-images")
-            .remove([path]);
-          if (error) {
-            console.log(error);
-          }
+  const onSubmit = (data: ProductFormData) => {
+    startTransition(async () => {
+      try {
+        console.log(newFiles);
+        const response = await submitProductAsync(
+          data,
+          newFiles,
+          deletedImages,
+          product
+        );
+        if (!response.success) {
+          console.error("Checkout error:", response.error);
         }
+      } catch (err) {
+        console.error("Error during form submit:", err);
       }
-
-      // Step 3: Prepare final image array
-      const allImages = [
-        ...(product?.product_images || [])
-          .filter((img) => !deletedImages.some((d) => d.url === img.url))
-          .map((img, index) => ({
-            url: img.url,
-            display_order: index,
-          })),
-        ...uploadedImageUrls,
-      ];
-
-      // Step 4: Replace the images in data and call RPC
-      const finalData = {
-        ...data,
-        ...(product?.id ? { id: product.id } : {}),
-        images: allImages,
-      };
-
-      // TODO: Call your Supabase RPC function here
-      console.log("Final Payload to RPC:", finalData);
-
-      const { error } = await supabase.rpc("create_or_update_product", {
-        product_input: finalData,
-      });
-      if (error) {
-        console.error("RPC error:", error.message);
-      }
-    } catch (err) {
-      console.error("Error during form submit:", err);
-    }
+    });
   };
 
   return (
@@ -238,8 +190,15 @@ const ProductForm = ({
       <Button
         className="w-full font-bold text-sm  cursor-pointer border-2 hover:bg-[#131313] hover:border-2 hover:border-white hover:text-white transition duration-300"
         type="submit"
+        disabled={isPending}
       >
-        {isEdit ? "Update Product" : "Create Product"}
+        {isPending ? (
+          <span>
+            <LoaderCircle className="size-5 animate-spin" />
+          </span>
+        ) : (
+          <span> {isEdit ? "Update Product" : "Create Product"}</span>
+        )}
       </Button>
     </form>
   );

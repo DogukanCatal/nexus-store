@@ -13,43 +13,39 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-type MailVerificationTemplateProps = {
-  name: string;
-  surname: string;
-  code: string;
+type OrderStatusChangeTemplateProps = {
+  orderRef: string;
+  newStatus: string;
 };
 
-export const EmailVerificationTemplate = ({
-  name,
-  surname,
-  code,
-}: MailVerificationTemplateProps) => (
+export const OrderStatusChangeTemplate = ({
+  orderRef,
+  newStatus,
+}: OrderStatusChangeTemplateProps) => (
   <Html>
     <Head />
-    <Preview>
-      Email Verification Code for {name} {surname}
-    </Preview>
+    <Preview>Your order {orderRef} status has been updated</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={logoSection}>
           <Img
-            src={`${baseUrl}/static/logo.png`}
+            src={`${baseUrl}/logo.png`}
             width="64"
             height="64"
-            alt="Logo"
+            alt="Nexus Store Logo"
             style={logoStyle}
           />
         </Section>
 
         <Section style={contentSection}>
-          <Text style={greetingText}>
-            Hi {name} {surname},
+          <Text style={heading}>Order Update</Text>
+          <Text style={statusText}>
+            Your order <strong>{orderRef}</strong> status has been updated to:
           </Text>
-          <Text style={instructionText}>Here is your verification code:</Text>
-          <Text style={codeBox}>{code}</Text>
-          <Text style={footerText}>
-            If you did not request this, please ignore this email.
-          </Text>
+          <Text style={statusBox}>{newStatus}</Text>
+          {/* <Text style={footerText}>
+            You can view more details in your Nexus Store account.
+          </Text> */}
         </Section>
 
         <Section style={footerSection}>
@@ -62,7 +58,7 @@ export const EmailVerificationTemplate = ({
   </Html>
 );
 
-export default EmailVerificationTemplate;
+export default OrderStatusChangeTemplate;
 
 // Styles
 const main = {
@@ -91,33 +87,33 @@ const contentSection = {
   textAlign: "center" as const,
 };
 
-const greetingText = {
-  fontSize: "20px",
-  marginBottom: "12px",
+const heading = {
+  fontSize: "24px",
+  fontWeight: "bold",
+  marginBottom: "16px",
 };
 
-const instructionText = {
+const statusText = {
   fontSize: "16px",
+  marginBottom: "16px",
+};
+
+const statusBox = {
+  backgroundColor: "#f5f5f5",
+  color: "#333",
+  display: "inline-block",
+  padding: "10px 20px",
+  fontSize: "18px",
+  fontWeight: "600",
+  borderRadius: "6px",
   marginBottom: "24px",
 };
 
-const codeBox = {
-  backgroundColor: "#262626",
-  color: "#ffffff",
-  display: "inline-block",
-  padding: "12px 24px",
-  fontSize: "24px",
-  fontWeight: "bold" as const,
-  borderRadius: "8px",
-  letterSpacing: "2px",
-  marginBottom: "32px",
-};
-
-const footerText = {
-  fontSize: "14px",
-  color: "#CCCCCC",
-  marginTop: "24px",
-};
+// const footerText = {
+//   fontSize: "14px",
+//   color: "#666",
+//   marginTop: "20px",
+// };
 
 const footerSection = {
   textAlign: "center" as const,
@@ -126,5 +122,5 @@ const footerSection = {
 
 const footerTextSmall = {
   fontSize: "12px",
-  color: "#888888",
+  color: "#999",
 };

@@ -1,5 +1,11 @@
 import React from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import LottieWrapper from "../lottie/LottieWrapper";
 import { motion } from "framer-motion";
 import ContinueShopping from "../shared/button/ContinueShopping";
@@ -21,6 +27,10 @@ const SuccessDialog = ({
         onInteractOutside={(e) => e.preventDefault()} //do not close dialog when outside of dialog is clicked
         onEscapeKeyDown={(e) => e.preventDefault()} //do not close dialog when esc is pressed
       >
+        <DialogHeader>
+          <DialogTitle></DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

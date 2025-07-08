@@ -13,7 +13,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { ChevronRight, ShoppingBag, ShoppingBasket } from "lucide-react";
+import { ChevronRight, Send, ShoppingBag, ShoppingBasket } from "lucide-react";
 import Link from "next/link";
 import { Collapsible } from "../ui/collapsible";
 import {
@@ -101,6 +101,14 @@ const AdminSidebar = () => {
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
+              <SidebarMenuItem key="Orders">
+                <SidebarMenuButton asChild>
+                  <Link href="/admin/orders">
+                    <Send />
+                    <span>Orders</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               {/* {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>

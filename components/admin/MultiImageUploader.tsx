@@ -54,8 +54,6 @@ const MultiImageUploader = ({
     onChange?.(files, updatedDeleted);
   };
 
-  console.log(files);
-
   return (
     <div className="flex flex-col items-center justify-center gap-2 w-full border-1 rounded-lg p-4 overflow-x-auto">
       <Input

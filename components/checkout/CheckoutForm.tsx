@@ -258,7 +258,13 @@ const CheckoutForm = () => {
             type="button"
             onClick={() => router.replace("/")}
           >
-            Continue Shopping
+            {isPlacingOrder ? (
+              <span>
+                <LoaderCircle className="size-5 animate-spin" />
+              </span>
+            ) : (
+              <span>Continue Shopping</span>
+            )}
           </Button>
           <div className="flex items-center justify-center w-full">
             <p className="text-xs text-muted-foreground text-center mt-2">

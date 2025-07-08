@@ -8,6 +8,7 @@ export type OrderConfirmationProps = {
     total_price: number;
     unit_price: number;
     quantity: number;
+    color_hex: string;
   }[];
   total_quantity: number;
   total_price: number;

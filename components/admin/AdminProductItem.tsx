@@ -22,7 +22,7 @@ const AdminProductItem = ({ product }: AdminProductItemProps) => {
         />
         <div className="flex flex-col items-start justify-center">
           <p className="font-semibold">{product.name}</p>
-          <p className="text-sm font-semibold text-gray-500">
+          <p className="text-xs font-semibold text-gray-500">
             <span>Last Update:</span> {dateConverter(product.updated_at)}
           </p>
         </div>
