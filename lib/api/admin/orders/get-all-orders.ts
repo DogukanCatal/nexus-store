@@ -12,6 +12,5 @@ export const getAllOrders = async (): Promise<Order[]> => {
     console.error("Error while fetching orders: ", error.message);
     return [];
   }
-  console.log("order", data);
   return data as Order[];
 };
