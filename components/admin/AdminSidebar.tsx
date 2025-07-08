@@ -92,7 +92,7 @@ const AdminSidebar = () => {
                           asChild
                           isActive={pathname === "/admin/create"}
                         >
-                          <Link href="/admin/create">
+                          <Link href={"/admin/products/create"}>
                             <span>Create Product</span>
                           </Link>
                         </SidebarMenuSubButton>

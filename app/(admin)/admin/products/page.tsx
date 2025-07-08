@@ -9,7 +9,12 @@ const AdminProductsPage = async () => {
   const products: AdminProduct[] = await getAllProductsAdmin();
 
   if (!products || products.length === 0) {
-    return <p>Product not found</p>;
+    return (
+      <div className="w-full flex-col flex items-center justify-center space-y-6 ">
+        <Link href={"/admin/products/create"}></Link>
+        <p>Products not found</p>
+      </div>
+    );
   }
 
   return (
