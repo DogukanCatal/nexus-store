@@ -5,11 +5,11 @@ import { unstable_cache } from "next/cache";
 
 const getAllProductsServer = unstable_cache(
   async (sort?: string, page = 0, pageSize = 24): Promise<Products[]> => {
-    console.log("CACHE DENIYORUMMMMMMMMMMMMMMM");
     let queryBuilder = createClient()
       .from("products_with_images")
       .select("*")
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .order("updated_at", { ascending: false });
 
     if (sort?.trim()) {
       switch (sort) {

@@ -10,7 +10,8 @@ const getAllProductsClient = async (
   let queryBuilder = createClient()
     .from("products_with_images")
     .select("*")
-    .eq("is_active", true);
+    .eq("is_active", true)
+    .order("updated_at", { ascending: false });
 
   if (sort?.trim()) {
     switch (sort) {
