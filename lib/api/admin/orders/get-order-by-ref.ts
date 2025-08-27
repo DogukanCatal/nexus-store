@@ -20,6 +20,5 @@ export const getOrderByRef = async (
     console.log("Error fetching Order Item: ", error.message);
     return null;
   }
-  console.log(data);
   return data as Order;
 };
